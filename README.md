@@ -1,8 +1,8 @@
-# dfalmez-gallery
+# Dflamez Shot - Photography Portfolio
 
-A modern, full-stack web application for photographers and artists to showcase their work, publish blogs, and manage bookings. Built with Next.js 15, React 19, and Supabase.
+A modern, full-stack web application for Akingbade Gold Wuraola (Dflamez Shot) to showcase photography work, publish blogs, and manage bookings. Built with Next.js 15, React 19, and Supabase.
 
-**Note: This application is custom-built for Akingbade Gold Wuraola and her brand "Dflamez Shot". All rights reserved.**
+**Note**: This application is developed specifically for Akingbade Gold Wuraola and her brand "Dflamez Shot". It is proprietary software and requires permission for any use or modification. Contact jattodare002@gmail.com for licensing inquiries.
 
 ## Table of Contents
 
@@ -16,9 +16,8 @@ A modern, full-stack web application for photographers and artists to showcase t
 - [Project Structure](#project-structure)
 - [Available Scripts](#available-scripts)
 - [Deployment](#deployment)
-- [Usage Rights](#usage-rights)
-- [Contributing](#contributing)
 - [License](#license)
+- [Contact](#contact)
 
 ## Features
 
@@ -91,8 +90,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
 # Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+NEXT_PUBLIC_CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
 # Stripe (optional)
@@ -163,30 +162,8 @@ The easiest way to deploy this application is with [Vercel](https://vercel.com),
 
 This application can be deployed to any hosting provider that supports Node.js. Make sure to set your environment variables in your hosting environment.
 
-## Usage Rights
+## Contact
 
-This application is custom-built for **Akingbade Gold Wuraola** for her brand **"Dflamez Shot"**. 
-
-**All rights reserved.** Any use of the code, in whole or in part, requires explicit permission from the repository owner or Akingbade Gold Wuraola (contact: jattodare002@gmail.com).
-
-This includes but is not limited to:
-- Copying or redistributing the source code
-- Using components or modules in other projects
-- Creating derivative works based on this codebase
-
-For permission requests, please contact jattodare002@gmail.com.
-
-## Contributing
-
-Contributions are welcome but require explicit permission from the repository owner or Akingbade Gold Wuraola (contact: jattodare002@gmail.com).
-
-1. Request permission to contribute
-2. Fork the repository (if permission granted)
-3. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-5. Push to the branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request
-
-## License
-
-This project is proprietary software developed for Akingbade Gold Wuraola. All rights reserved. See [LICENSE](LICENSE) file for details.
+For support or inquiries about this application, please contact:
+- Akingbade Gold Wuraola (Client)
+- Email: jattodare002@gmail.com (for technical inquiries)

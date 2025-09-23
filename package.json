@@ -1,7 +1,7 @@
 {
-  "name": "dfalmez-gallery",
+  "name": "dflamez-shot",
   "version": "0.1.0",
-  "description": "A modern, full-stack web application for photographers and artists to showcase their work, publish blogs, and manage bookings. Custom-built for Akingbade Gold Wuraola (Dflamez Shot).",
+  "description": "A modern, full-stack web application for Akingbade Gold Wuraola (Dflamez Shot) to showcase photography work, publish blogs, and manage bookings.",
   "keywords": [
     "nextjs",
     "react",
@@ -10,10 +10,8 @@
     "portfolio",
     "blog",
     "supabase",
-    "cloudinary",
-    "dflamez-shot"
+    "cloudinary"
   ],
-  "author": "Akingbade Gold Wuraola",
   "private": true,
   "scripts": {
     "build": "next build",

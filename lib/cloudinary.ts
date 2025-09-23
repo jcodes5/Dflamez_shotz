@@ -16,7 +16,7 @@ export interface CloudinaryUploadResult {
   duration?: number
 }
 
-export async function uploadToCloudinary(file: File, folder = "dfalmez-gallery"): Promise<CloudinaryUploadResult> {
+export async function uploadToCloudinary(file: File, folder = "dflamez-gallery"): Promise<CloudinaryUploadResult> {
   const bytes = await file.arrayBuffer()
   const buffer = Buffer.from(bytes)
 

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { uploadToCloudinary } from "@/lib/cloudinary"
-import { createClient } from "@/lib/supabase/server"
+import { createApiRouteClient } from "@/lib/supabase/server"
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,10 +15,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Upload to Cloudinary
-    const uploadResult = await uploadToCloudinary(file, "dfalmez-gallery")
+    const uploadResult = await uploadToCloudinary(file, "dflamez-gallery")
 
     // Save to database
-    const supabase = createClient()
+    const supabase = createApiRouteClient()
     const { data, error } = await supabase
       .from("gallery_items")
       .insert({
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         description,
         category,
         cloudinary_public_id: uploadResult.public_id,
-        url: uploadResult.secure_url,
+        image_url: uploadResult.secure_url,
         type: uploadResult.resource_type,
         width: uploadResult.width,
         height: uploadResult.height,
