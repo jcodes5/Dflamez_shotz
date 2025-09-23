@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { Lightbox } from "./lightbox"
 import { GalleryFilter } from "./gallery-filter"
@@ -8,77 +8,11 @@ import { motion, AnimatePresence } from "framer-motion"
 
 interface GalleryItem {
   id: string
-  src: string
-  alt: string
+  image_url: string
+  title: string
   category: string
-  title?: string
+  description?: string
 }
-
-const mockGalleryItems: GalleryItem[] = [
-  {
-    id: "1",
-    src: "/soul-portrait-intense-gaze.png",
-    alt: "Soul Portrait - Intense Contemplative Gaze",
-    category: "Soul Portraits",
-    title: "Contemplative Gaze",
-  },
-  {
-    id: "2",
-    src: "/cinematic-video-frame.png",
-    alt: "Cinematic Video Still Frame",
-    category: "Videography",
-    title: "Urban Stories",
-  },
-  {
-    id: "3",
-    src: "/creative-portrait-lighting.png",
-    alt: "Creative Portrait with Innovative Lighting",
-    category: "Photography",
-    title: "Golden Hour Magic",
-  },
-  {
-    id: "4",
-    src: "/soul-portrait-emotional.png",
-    alt: "Emotional Soul Portrait",
-    category: "Soul Portraits",
-    title: "Inner Strength",
-  },
-  {
-    id: "5",
-    src: "/videography-behind-scenes.png",
-    alt: "Behind the Scenes Video Production",
-    category: "Videography",
-    title: "Midnight Reflections",
-  },
-  {
-    id: "6",
-    src: "/artistic-composition-abstract.png",
-    alt: "Abstract Artistic Composition",
-    category: "Photography",
-    title: "Abstract Emotions",
-  },
-  {
-    id: "7",
-    src: "/gallery-showcase-1.png",
-    alt: "Professional Soul Portrait",
-    category: "Soul Portraits",
-    title: "Windows to the Soul",
-  },
-  {
-    id: "8",
-    src: "/documentary-style-moment.png",
-    alt: "Documentary Style Authentic Moment",
-    category: "Videography",
-    title: "Authentic Moments",
-  },
-  {
-    id: "9",
-    src: "/artistic-fashion-portrait.png",
-    alt: "High Fashion Portrait with Dramatic Lighting",
-    category: "Photography",
-    title: "Shadow Play",
-  },
-]
 
 const categories = ["All", "Soul Portraits", "Videography", "Photography"]
 
@@ -86,9 +20,33 @@ export function GalleryGrid() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filteredItems =
-    activeCategory === "All" ? mockGalleryItems : mockGalleryItems.filter((item) => item.category === activeCategory)
+  // Fetch gallery items from API
+  useEffect(() => {
+    const fetchGalleryItems = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch("/api/gallery")
+        if (!response.ok) {
+          throw new Error("Failed to fetch gallery items")
+        }
+        const data = await response.json()
+        setGalleryItems(data.data || [])
+      } catch (error) {
+        console.error("Error fetching gallery items:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchGalleryItems()
+  }, [])
+
+  const filteredItems = activeCategory === "All" 
+    ? galleryItems 
+    : galleryItems.filter((item) => item.category === activeCategory)
 
   const openLightbox = (index: number) => {
     setCurrentImageIndex(index)
@@ -105,6 +63,16 @@ export function GalleryGrid() {
 
   const previousImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length)
+  }
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        <div className="text-center">
+          <p>Loading gallery...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -151,8 +119,8 @@ export function GalleryGrid() {
             >
               <div className="aspect-square overflow-hidden bg-muted">
                 <motion.img
-                  src={item.src}
-                  alt={item.alt}
+                  src={item.image_url}
+                  alt={item.title}
                   className="w-full h-full object-cover"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
@@ -187,7 +155,13 @@ export function GalleryGrid() {
 
       {/* Lightbox */}
       <Lightbox
-        images={filteredItems}
+        images={filteredItems.map(item => ({ 
+          id: item.id, 
+          src: item.image_url, 
+          alt: item.title,
+          category: item.category,
+          title: item.title
+        }))}
         currentIndex={currentImageIndex}
         isOpen={lightboxOpen}
         onClose={closeLightbox}

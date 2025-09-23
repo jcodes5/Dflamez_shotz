@@ -56,6 +56,9 @@ export function Lightbox({ images, currentIndex, isOpen, onClose, onNext, onPrev
   if (!isOpen || !images[currentIndex]) return null
 
   const currentImage = images[currentIndex]
+  
+  // Check if the source is a video URL (TikTok or Instagram)
+  const isVideo = currentImage.src.includes('tiktok.com') || currentImage.src.includes('instagram.com')
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm">
@@ -92,13 +95,28 @@ export function Lightbox({ images, currentIndex, isOpen, onClose, onNext, onPrev
           <ChevronRight className="h-8 w-8" />
         </Button>
 
-        {/* Image */}
+        {/* Media content */}
         <div className="relative max-h-full max-w-full">
-          <img
-            src={currentImage.src || "/placeholder.svg"}
-            alt={currentImage.alt}
-            className="max-h-[90vh] max-w-[90vw] object-contain"
-          />
+          {isVideo ? (
+            // Render iframe for video content
+            <div className="relative w-full" style={{ paddingBottom: '125%' }}>
+              <iframe
+                src={currentImage.src}
+                className="absolute top-0 left-0 w-full h-full object-contain"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={currentImage.alt}
+              />
+            </div>
+          ) : (
+            // Render image for image content
+            <img
+              src={currentImage.src || "/placeholder.svg"}
+              alt={currentImage.alt}
+              className="max-h-[90vh] max-w-[90vw] object-contain"
+            />
+          )}
 
           {/* Image info */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
