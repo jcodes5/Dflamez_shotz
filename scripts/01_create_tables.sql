@@ -81,6 +81,24 @@ CREATE INDEX IF NOT EXISTS idx_payments_booking_id ON payments(booking_id);
 CREATE INDEX IF NOT EXISTS idx_gallery_items_category ON gallery_items(category);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_published ON blog_posts(published);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug);
+CREATE INDEX IF NOT EXISTS idx_hire_requests_status ON hire_requests(status);
+CREATE INDEX IF NOT EXISTS idx_hire_requests_created_at ON hire_requests(created_at);
+
+-- Create hire_requests table for hire request management
+CREATE TABLE IF NOT EXISTS hire_requests (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  client_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  service_type VARCHAR(100) NOT NULL,
+  budget VARCHAR(50),
+  preferred_date DATE,
+  message TEXT NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending',
+  priority VARCHAR(20) DEFAULT 'medium',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
 -- Create admins table for single admin user authentication
 CREATE TABLE IF NOT EXISTS admins (

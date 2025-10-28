@@ -1,4 +1,4 @@
-import { createServerComponentClient, createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient, createBrowserClient } from "@supabase/ssr"
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 import { cache } from "react"
@@ -11,40 +11,7 @@ export const isSupabaseConfigured =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.length > 0
 
 // Create a cached version of the Supabase client for Server Components
-export const createClient = cache(() => {
-  // Check if we're in a request context before accessing cookies
-  let cookieStore;
-  try {
-    cookieStore = cookies()
-  } catch (error) {
-    // If we're outside a request context (e.g., in a script), return a dummy client
-    if (!isSupabaseConfigured) {
-      console.warn("Supabase environment variables are not set. Using dummy client.")
-      return {
-        auth: {
-          getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-          getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-        },
-      }
-    }
-    
-    // For server-side scripts, we create a client without cookies
-    // This is needed for setup scripts that run outside request context
-    return createServerComponentClient({ 
-      cookies: () => Promise.resolve({
-        getAll: () => [],
-        get: () => undefined,
-        set: () => undefined,
-        delete: () => undefined,
-        has: () => false,
-        [Symbol.iterator]: function* () {
-          // Empty iterator
-        },
-        size: 0,
-      } as unknown as ReturnType<typeof cookies>)
-    })
-  }
-
+export const createClient = cache(async () => {
   if (!isSupabaseConfigured) {
     console.warn("Supabase environment variables are not set. Using dummy client.")
     return {
@@ -55,7 +22,36 @@ export const createClient = cache(() => {
     }
   }
 
-  return createServerComponentClient({ cookies: () => cookieStore })
+  // Check if we're in a request context before accessing cookies
+  try {
+    const cookieStore = await cookies()
+    return createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: ({
+          getAll() {
+            return cookieStore.getAll()
+          },
+          get(name: string) {
+            return cookieStore.get(name)?.value
+          },
+          set(name: string, value: string, options: any) {
+            cookieStore.set(name, value, options)
+          },
+          remove(name: string, options: any) {
+            cookieStore.set(name, '', { ...options, maxAge: 0 })
+          },
+        } as any)
+      }
+    )
+  } catch (error) {
+    // If we're outside a request context (e.g., in a script), return a dummy client
+    return createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  }
 })
 
 // Create a client specifically for API routes that properly handles cookies
@@ -70,8 +66,31 @@ export const createApiRouteClient = () => {
     }
   }
 
-  // For API routes, we need to properly await cookies
-  return createRouteHandlerClient({ cookies })
+  // For API routes, we need to properly handle cookies asynchronously
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: ({
+        async getAll() {
+          const cookieStore = await cookies();
+          return cookieStore.getAll();
+        },
+        async get(name: string) {
+          const cookieStore = await cookies();
+          return cookieStore.get(name)?.value;
+        },
+        async set(name: string, value: string, options: any) {
+          const cookieStore = await cookies();
+          cookieStore.set(name, value, options);
+        },
+        async remove(name: string, options: any) {
+          const cookieStore = await cookies();
+          cookieStore.set(name, '', { ...options, maxAge: 0 });
+        },
+      } as any)
+    }
+  )
 }
 
 // Create a service role client that can bypass RLS - for server-side operations only

@@ -1,12 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createApiRouteClient } from "@/lib/supabase/server"
+import { type SupabaseClient } from "@supabase/supabase-js"
+import { createApiRouteClient, createServiceRoleClient } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get("category")
 
-    const supabase = createApiRouteClient()
+    const supabase = createApiRouteClient() as SupabaseClient
 
     let query = supabase
       .from("gallery_items")
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title, image URL, and category are required" }, { status: 400 })
     }
 
-    const supabase = createApiRouteClient()
+    const supabase = createServiceRoleClient() as SupabaseClient
 
     // Insert the gallery item into the database
     const { data, error } = await supabase
