@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Upload, Search, MoreVertical, Edit, Trash2, Eye, Download } from "lucide-react"
 import { GalleryUploadForm } from "@/components/admin/gallery-upload-form"
+import { GalleryEditDialog } from "@/components/admin/gallery-edit-dialog"
+import { GalleryDeleteDialog } from "@/components/admin/gallery-delete-dialog"
 
 interface GalleryItem {
   id: string
@@ -24,6 +26,12 @@ export function GalleryManager() {
   const [showUploadForm, setShowUploadForm] = useState(false)
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deletingItem, setDeletingItem] = useState<GalleryItem | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // Fetch gallery items from API
   useEffect(() => {
@@ -46,23 +54,141 @@ export function GalleryManager() {
     fetchGalleryItems()
   }, [])
 
-  const handleUploadComplete = () => {
-    // Refresh the gallery items
-    const fetchGalleryItems = async () => {
-      try {
-        const response = await fetch("/api/gallery")
-        if (!response.ok) {
-          throw new Error("Failed to fetch gallery items")
-        }
-        const data = await response.json()
-        setGalleryItems(data.data || [])
-      } catch (error) {
-        console.error("Error fetching gallery items:", error)
+  const fetchGalleryItems = async () => {
+    try {
+      const response = await fetch("/api/gallery")
+      if (!response.ok) {
+        throw new Error("Failed to fetch gallery items")
       }
+      const data = await response.json()
+      setGalleryItems(data.data || [])
+    } catch (error) {
+      console.error("Error fetching gallery items:", error)
     }
+  }
 
+  const handleUploadComplete = () => {
     fetchGalleryItems()
     setShowUploadForm(false)
+  }
+
+  const handleDeleteItem = (item: GalleryItem) => {
+    setDeletingItem(item)
+    setShowDeleteDialog(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deletingItem) return
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/gallery?id=${deletingItem.id}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to delete item")
+      }
+
+      setGalleryItems(prev => prev.filter(item => item.id !== deletingItem.id))
+      setSelectedItems(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(deletingItem.id)
+        return newSet
+      })
+      setShowDeleteDialog(false)
+      setDeletingItem(null)
+    } catch (error) {
+      console.error("Error deleting item:", error)
+      alert("Failed to delete item")
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const handleBulkDelete = () => {
+    if (selectedItems.size === 0) return
+    setDeletingItem(null) // null indicates bulk delete
+    setShowDeleteDialog(true)
+  }
+
+  const handleConfirmBulkDelete = async () => {
+    setIsDeleting(true)
+    try {
+      const ids = Array.from(selectedItems).join(",")
+      const response = await fetch(`/api/gallery?ids=${ids}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to delete items")
+      }
+
+      setGalleryItems(prev => prev.filter(item => !selectedItems.has(item.id)))
+      setSelectedItems(new Set())
+      setShowDeleteDialog(false)
+    } catch (error) {
+      console.error("Error deleting items:", error)
+      alert("Failed to delete items")
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  const handleEditItem = (item: GalleryItem) => {
+    setEditingItem(item)
+    setShowEditDialog(true)
+  }
+
+  const handleSaveEdit = async (updatedItem: GalleryItem) => {
+    try {
+      const response = await fetch(`/api/gallery?id=${updatedItem.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: updatedItem.title,
+          description: updatedItem.description,
+          category: updatedItem.category,
+          isFeatured: updatedItem.is_featured,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update item")
+      }
+
+      setGalleryItems(prev => prev.map(item =>
+        item.id === updatedItem.id ? updatedItem : item
+      ))
+      setShowEditDialog(false)
+      setEditingItem(null)
+    } catch (error) {
+      console.error("Error updating item:", error)
+      alert("Failed to update item")
+    }
+  }
+
+  const handleSelectItem = (id: string, selected: boolean) => {
+    setSelectedItems(prev => {
+      const newSet = new Set(prev)
+      if (selected) {
+        newSet.add(id)
+      } else {
+        newSet.delete(id)
+      }
+      return newSet
+    })
+  }
+
+  const handleSelectAll = (selected: boolean) => {
+    if (selected) {
+      const allIds = new Set(galleryItems.map(item => item.id))
+      setSelectedItems(allIds)
+    } else {
+      setSelectedItems(new Set())
+    }
   }
 
   if (showUploadForm) {
@@ -140,6 +266,15 @@ export function GalleryManager() {
             )
             .map((item) => (
               <Card key={item.id} className="overflow-hidden">
+                <div className="absolute top-2 left-2 z-10">
+                  <input
+                    type="checkbox"
+                    className="rounded border-gray-300"
+                    checked={selectedItems.has(item.id)}
+                    onChange={(e) => handleSelectItem(item.id, e.target.checked)}
+                    aria-label={`Select ${item.title}`}
+                  />
+                </div>
                 <div className="aspect-square bg-muted relative group">
                   <img 
                     src={item.image_url || "/placeholder.svg"} 
@@ -151,16 +286,16 @@ export function GalleryManager() {
                     }}
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <Button size="sm" variant="secondary">
+                    <Button size="sm" variant="secondary" onClick={() => window.open(item.image_url, '_blank')}>
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="secondary">
+                    <Button size="sm" variant="secondary" onClick={() => handleEditItem(item)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="secondary">
+                    <Button size="sm" variant="secondary" onClick={() => window.open(item.image_url, '_blank')}>
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="destructive">
+                    <Button size="sm" variant="destructive" onClick={() => handleDeleteItem(item)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -191,22 +326,58 @@ export function GalleryManager() {
       <Card className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <input aria-label="true" type="checkbox" className="rounded" />
-            <span className="text-sm text-muted-foreground">Select all</span>
+            <input
+              type="checkbox"
+              className="rounded"
+              checked={selectedItems.size === galleryItems.length && galleryItems.length > 0}
+              onChange={(e) => handleSelectAll(e.target.checked)}
+              aria-label="Select all items"
+            />
+            <span className="text-sm text-muted-foreground">
+              {selectedItems.size > 0 ? `${selectedItems.size} selected` : "Select all"}
+            </span>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={selectedItems.size === 0}
+            >
               Bulk Edit
             </Button>
             <Button variant="outline" size="sm">
               Export
             </Button>
-            <Button variant="destructive" size="sm">
-              Delete Selected
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={selectedItems.size === 0}
+              onClick={handleBulkDelete}
+            >
+              Delete Selected ({selectedItems.size})
             </Button>
           </div>
         </div>
       </Card>
+
+      {/* Edit Dialog */}
+      <GalleryEditDialog
+        item={editingItem}
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        onSave={handleSaveEdit}
+      />
+
+      {/* Delete Dialog */}
+      <GalleryDeleteDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={deletingItem ? handleConfirmDelete : handleConfirmBulkDelete}
+        itemTitle={deletingItem?.title}
+        isBulk={!deletingItem}
+        itemCount={selectedItems.size}
+        isDeleting={isDeleting}
+      />
     </div>
   )
 }

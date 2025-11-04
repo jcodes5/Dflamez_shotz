@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Briefcase, Calendar, DollarSign, User, Phone, Mail, MessageSquare, Check, X, Clock, RefreshCw } from "lucide-react"
+import { Briefcase, Calendar, DollarSign, User, Phone, Mail, MessageSquare, Check, X, Clock, RefreshCw, MapPin } from "lucide-react"
 import { toast } from "sonner"
 
 interface HireRequest {
@@ -20,6 +20,12 @@ interface HireRequest {
   priority: "low" | "medium" | "high"
   created_at: string
   updated_at: string
+  location: string | null
+  style: string[]
+  add_ons: string[]
+  contact_preference: "email" | "phone" | "whatsapp"
+  reference_images: string[]
+  estimated_cost: number | null
 }
 
 export function HireManager() {
@@ -86,7 +92,10 @@ export function HireManager() {
     potentialRevenue: hireRequests
       .filter(r => r.status === 'approved')
       .reduce((sum, r) => {
-        // Simple revenue calculation - could be improved with actual pricing logic
+        // Use estimated cost if available, otherwise parse budget
+        if (r.estimated_cost) {
+          return sum + r.estimated_cost
+        }
         const budget = r.budget || '$0'
         const amount = parseInt(budget.replace(/[^0-9]/g, '')) || 0
         return sum + amount
@@ -246,6 +255,16 @@ export function HireManager() {
                       <span className="text-sm text-foreground">{request.phone}</span>
                     </div>
                   )}
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-foreground">Prefers: {request.contact_preference}</span>
+                  </div>
+                  {request.estimated_cost && (
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-foreground font-semibold">Est. Cost: ${request.estimated_cost}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-3">
                   {request.preferred_date && (
@@ -263,16 +282,73 @@ export function HireManager() {
                     </div>
                   )}
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <Briefcase className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-foreground">Service: {request.service_type}</span>
                   </div>
+                  {request.location && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-foreground">Location: {request.location}</span>
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {/* Style Preferences */}
+              {request.style && request.style.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-foreground mb-2">Style Preferences:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {request.style.map((style, index) => (
+                      <Badge key={index} variant="outline" className="text-xs">
+                        {style}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Add-ons */}
+              {request.add_ons && request.add_ons.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-foreground mb-2">Selected Add-ons:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {request.add_ons.map((addOn, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs">
+                        {addOn}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Reference Images */}
+              {request.reference_images && request.reference_images.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-foreground mb-2">Reference Images:</h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    {request.reference_images.slice(0, 3).map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Reference ${index + 1}`}
+                        className="w-full h-16 object-cover rounded cursor-pointer hover:opacity-80"
+                        onClick={() => window.open(image, "_blank")}
+                      />
+                    ))}
+                    {request.reference_images.length > 3 && (
+                      <div className="w-full h-16 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
+                        +{request.reference_images.length - 3} more
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="bg-muted/50 rounded-lg p-4 mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">Client Message:</span>
+                  <span className="text-sm font-semibold text-foreground">Project Description:</span>
                 </div>
                 <p className="text-foreground">{request.message}</p>
               </div>

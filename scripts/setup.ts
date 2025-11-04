@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import dotenv from 'dotenv'
-dotenv.config({ path: '.env.local' })
+dotenv.config({ path: '.env' })
 
 import { initAdminUser } from "./init-admin"
 

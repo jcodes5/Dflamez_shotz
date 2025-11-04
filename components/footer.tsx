@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Instagram, Twitter, Facebook, Mail, Phone, MapPin } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { HireButton } from "@/components/hire/hire-modal"
 
 export function Footer() {
   return (
@@ -55,6 +56,7 @@ export function Footer() {
               {[
                 { name: "Gallery", href: "/gallery" },
                 { name: "Services", href: "/services" },
+                { name: "Hire", href: "/hire" },
                 { name: "About", href: "/about" },
                 { name: "Gold's Pen", href: "/blog" },
                 { name: "Contact", href: "/contact" },
@@ -90,17 +92,11 @@ export function Footer() {
             </div>
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base"
-                asChild
+              <HireButton
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base"
               >
-                <Link
-                  href="https://wa.me/1234567890?text=Hi%20Dfalmez,%20I'm%20interested%20in%20your%20services"
-                  target="_blank"
-                >
-                  HIRE ME NOW
-                </Link>
-              </Button>
+                HIRE ME NOW
+              </HireButton>
             </motion.div>
           </div>
         </div>

@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
+import { ImageUpload } from "@/components/admin/image-upload"
 
 interface BlogPostData {
   title: string
@@ -185,13 +186,11 @@ export function BlogEditor({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="featuredImage">Featured Image URL</Label>
-            <Input
-              id="featuredImage"
-              name="featuredImage"
+            <ImageUpload
               value={postData.featuredImage}
-              onChange={handleInputChange}
-              placeholder="https://example.com/image.jpg"
+              onChange={(value) => setPostData(prev => ({ ...prev, featuredImage: value }))}
+              label="Featured Image"
+              placeholder="Click to upload a featured image"
             />
           </div>
           

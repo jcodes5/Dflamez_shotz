@@ -4,7 +4,7 @@ import path from 'path'
 import dotenv from 'dotenv'
 
 // Load environment variables from .env.local
-dotenv.config({ path: '.env.local' })
+dotenv.config({ path: '.env' })
 
 async function initDatabase() {
   // Check if required environment variables are set

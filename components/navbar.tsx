@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Menu, X, ExternalLink } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -12,6 +12,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Services", href: "/services" },
+  { name: "Hire", href: "/hire" },
   { name: "Gallery", href: "/gallery" },
   { name: "Gold's Pen", href: "/blog" },
   { name: "Contact", href: "/contact" },
@@ -20,17 +21,20 @@ const navigation = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "auto"
-    return () => {
-      document.body.style.overflow = "auto"
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = mobileMenuOpen ? "hidden" : "auto"
+      return () => {
+        document.body.style.overflow = "auto"
+      }
     }
   }, [mobileMenuOpen])
 
   const handleHireClick = () => {
-    window.open("https://wa.me/234XXXXXXXXXX", "_blank") // replace with real WhatsApp number
+    router.push("/hire")
   }
 
   return (

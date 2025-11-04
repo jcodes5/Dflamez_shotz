@@ -132,14 +132,11 @@ export default function ContactPage() {
     const message = encodeURIComponent(
       `Hi Dflamez! I'm interested in your photography services. I'd love to discuss a potential project with you.`,
     )
-    window.open(`https://wa.me/15551234567?text=${message}`, "_blank")
+    window.open(`http://wa.me/2348106643611?text=${message}`, "_blank")
   }
 
   const handleHireClick = () => {
-    const message = encodeURIComponent(
-      `Hi Dflamez! I'd like to hire you for a photography session. Can we discuss the details?`,
-    )
-    window.open(`https://wa.me/15551234567?text=${message}`, "_blank")
+    window.location.href = "/hire"
   }
 
   return (
@@ -244,6 +241,7 @@ export default function ContactPage() {
                       name="inquiryType"
                       value={formData.inquiryType}
                       onChange={handleInputChange}
+                      aria-label="Inquiry Type"
                       className="mt-1 w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                       <option value="">Select inquiry type</option>

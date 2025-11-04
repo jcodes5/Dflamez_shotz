@@ -113,6 +113,7 @@ export function ContactManager() {
             />
           </div>
           <select
+            aria-label="Filter contacts by status"
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
             className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
@@ -181,6 +182,7 @@ export function ContactManager() {
                 </div>
                 <div className="flex gap-2">
                   <select
+                    aria-label="Change contact status"
                     value={contact.status}
                     onChange={(e) => updateContactStatus(contact.id, e.target.value)}
                     className="px-2 py-1 border border-border rounded-md bg-background text-foreground text-sm"

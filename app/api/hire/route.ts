@@ -24,6 +24,10 @@ function validateHireRequest(data: any) {
     errors.push("Message is required and must be at least 10 characters")
   }
 
+  if (!data.style || !Array.isArray(data.style) || data.style.length === 0) {
+    errors.push("At least one photography style must be selected")
+  }
+
   if (data.phone && (typeof data.phone !== 'string' || data.phone.length > 50)) {
     errors.push("Phone number must be less than 50 characters")
   }
@@ -32,8 +36,16 @@ function validateHireRequest(data: any) {
     errors.push("Budget must be less than 50 characters")
   }
 
+  if (data.location && (typeof data.location !== 'string' || data.location.length > 200)) {
+    errors.push("Location must be less than 200 characters")
+  }
+
   if (data.preferredDate && isNaN(Date.parse(data.preferredDate))) {
     errors.push("Preferred date must be a valid date")
+  }
+
+  if (data.contactPreference && !['email', 'phone', 'whatsapp'].includes(data.contactPreference)) {
+    errors.push("Contact preference must be one of: email, phone, whatsapp")
   }
 
   return errors
@@ -71,21 +83,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert hire request into database
-    const { data, error } = await supabase
-      .from('hire_requests')
-      .insert({
-        client_name: body.clientName.trim(),
-        email: body.email.trim().toLowerCase(),
-        phone: body.phone?.trim() || null,
-        service_type: body.serviceType.trim(),
-        budget: body.budget?.trim() || null,
-        preferred_date: body.preferredDate ? new Date(body.preferredDate).toISOString().split('T')[0] : null,
-        message: body.message.trim(),
-        status: 'pending',
-        priority: body.priority || 'medium'
-      })
-      .select()
-      .single()
+  const { data, error } = await supabase
+    .from('hire_requests')
+    .insert({
+      client_name: body.clientName.trim(),
+      email: body.email.trim().toLowerCase(),
+      phone: body.phone?.trim() || null,
+      service_type: body.serviceType.trim(),
+      budget: body.budget?.trim() || null,
+      preferred_date: body.preferredDate ? new Date(body.preferredDate).toISOString().split('T')[0] : null,
+      message: body.message.trim(),
+      status: 'pending',
+      priority: body.priority || 'medium',
+      location: body.location?.trim() || null,
+      style: body.style || [],
+      add_ons: body.addOns || [],
+      contact_preference: body.contactPreference || 'email',
+      reference_images: body.referenceImages || [],
+      estimated_cost: body.estimatedCost || null
+    })
+    .select()
+    .single()
 
     if (error) {
       console.error('Database error:', error)

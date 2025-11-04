@@ -17,6 +17,7 @@ interface FormData {
   category: string
   file: File | null
   videoUrl: string
+  featuredImageUrl: string
   isFeatured: boolean
 }
 
@@ -27,6 +28,7 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
     category: "Photography",
     file: null,
     videoUrl: "",
+    featuredImageUrl: "",
     isFeatured: false
   })
   
@@ -141,7 +143,7 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
           body: JSON.stringify({
             title: formData.title,
             description: formData.description,
-            imageUrl: formData.videoUrl,
+            imageUrl: formData.featuredImageUrl || formData.videoUrl,
             category: formData.category,
             isFeatured: formData.isFeatured,
           }),
@@ -163,6 +165,7 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
         category: "Photography",
         file: null,
         videoUrl: "",
+        featuredImageUrl: "",
         isFeatured: false
       })
       
@@ -257,22 +260,42 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
             </div>
           </div>
         ) : (
-          <div className="space-y-2">
-            <Label htmlFor="videoUrl">Video URL</Label>
-            <div className="relative">
-              <Link className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="videoUrl"
-                name="videoUrl"
-                value={formData.videoUrl}
-                onChange={handleInputChange}
-                placeholder="https://www.tiktok.com/... or https://www.instagram.com/..."
-                className="pl-10"
-              />
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="videoUrl">Video URL</Label>
+              <div className="relative">
+                <Link className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="videoUrl"
+                  name="videoUrl"
+                  value={formData.videoUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://www.tiktok.com/... or https://www.instagram.com/..."
+                  className="pl-10"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Enter a TikTok or Instagram video URL
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Enter a TikTok or Instagram video URL
-            </p>
+
+            <div className="space-y-2">
+              <Label htmlFor="featuredImageUrl">Featured Image URL (Optional)</Label>
+              <div className="relative">
+                <Link className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="featuredImageUrl"
+                  name="featuredImageUrl"
+                  value={formData.featuredImageUrl}
+                  onChange={handleInputChange}
+                  placeholder="https://example.com/image.jpg"
+                  className="pl-10"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Add a thumbnail image URL for this video
+              </p>
+            </div>
           </div>
         )}
 
