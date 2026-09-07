@@ -2,11 +2,13 @@
 
 import { Navbar } from "@/components/navbar";
 import { HireForm } from "@/components/hire/hire-form";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export default function HirePage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "Hire Dflamez" }]} />
 
       {/* Header */}
       <section className="py-16 bg-muted/20">

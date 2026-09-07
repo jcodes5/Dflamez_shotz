@@ -14,11 +14,11 @@ export function Footer() {
           {/* Brand section */}
           <div className="sm:col-span-2 lg:col-span-2 text-center sm:text-left">
             <motion.h3
-              className="font-serif text-2xl sm:text-3xl font-black text-foreground mb-4 transform -rotate-1"
+              className="font-brand text-3xl sm:text-4xl font-normal text-foreground mb-4 transform -rotate-1"
               whileHover={{ rotate: 0, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              DFLAMEZ <span className="text-primary">SHOT</span>
+              Dflamez <span className="text-primary">Shotz</span>
             </motion.h3>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto sm:mx-0 text-sm sm:text-base">
               Capturing souls through powerful portraits, cinematic videography, and authentic photography. Every frame

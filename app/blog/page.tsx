@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { PenTool } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 interface BlogPost {
   id: string
@@ -88,6 +89,7 @@ const BlogPage = () => {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "Gold's Pen" }]} />
 
       {/* Hero Section */}
       <section className="py-20 bg-background">

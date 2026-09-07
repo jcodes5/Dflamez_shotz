@@ -22,10 +22,7 @@ async function setup() {
   }
   
   console.log("\n🎉 Setup completed successfully!")
-  console.log("\nYou can now log in to the admin panel with:")
-  console.log("Email: dflamez@example.com")
-  console.log("Password: goldsdashboard2025")
-  console.log("\nRemember to change the default password after your first login!")
+  console.log("\nYou can now log in with the AUTH_ADMIN_EMAIL and ADMIN_INITIAL_PASSWORD values from .env")
 }
 
 setup().catch((error) => {

@@ -32,16 +32,26 @@ export default function LoginPage() {
     setIsLoading(true)
     setError("")
 
-    // Simple authentication check (in a real app, this would be server-side)
-    if (credentials.email === "dflamez@example.com" && credentials.password === "goldsdashboard2025") {
-      // Store auth token in localStorage (in a real app, use secure cookies)
-      localStorage.setItem("adminAuth", "authenticated")
-      router.push("/admin")
-    } else {
-      setError("Invalid email or password")
-    }
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+      })
+      const result = await response.json()
 
-    setIsLoading(false)
+      if (!response.ok) {
+        setError(result.error || "Invalid email or password")
+        return
+      }
+
+      router.push("/admin")
+      router.refresh()
+    } catch (error) {
+      setError("Unable to sign in. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -127,12 +137,7 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-muted/50 rounded-lg">
-            <p className="text-sm text-muted-foreground mb-2">Demo Credentials:</p>
-            <p className="text-sm font-mono">Email: dflamez@example.com</p>
-            <p className="text-sm font-mono">Password: goldsdashboard2025</p>
-          </div>
+          
         </Card>
       </div>
     </div>

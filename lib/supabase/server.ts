@@ -122,3 +122,31 @@ export const createServiceRoleClient = () => {
     serviceRoleKey
   )
 }
+
+export const getAuthenticatedAdmin = cache(async () => {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user?.email) {
+    return null
+  }
+
+  if (user.app_metadata?.role === "admin") {
+    return user
+  }
+
+  const serviceRoleClient = createServiceRoleClient() as ReturnType<typeof createServiceRoleClient> & {
+    from: (table: string) => any
+  }
+  const { data: admin } = await serviceRoleClient
+    .from("admins")
+    .select("id")
+    .eq("email", user.email)
+    .maybeSingle()
+
+  return admin ? user : null
+})
+
+export async function isAuthenticatedAdmin() {
+  return Boolean(await getAuthenticatedAdmin())
+}

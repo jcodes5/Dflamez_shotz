@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Quote, Star, Heart, Camera } from "lucide-react"
 import Link from "next/link"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const testimonials = [
   {
@@ -30,8 +31,9 @@ const testimonials = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="about-page min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "About" }]} />
 
       {/* Hero Section */}
       <section className="py-20 bg-background">

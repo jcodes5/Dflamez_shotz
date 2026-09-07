@@ -81,8 +81,6 @@ CREATE INDEX IF NOT EXISTS idx_payments_booking_id ON payments(booking_id);
 CREATE INDEX IF NOT EXISTS idx_gallery_items_category ON gallery_items(category);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_published ON blog_posts(published);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug);
-CREATE INDEX IF NOT EXISTS idx_hire_requests_status ON hire_requests(status);
-CREATE INDEX IF NOT EXISTS idx_hire_requests_created_at ON hire_requests(created_at);
 
 -- Create hire_requests table for hire request management
 CREATE TABLE IF NOT EXISTS hire_requests (
@@ -99,6 +97,9 @@ CREATE TABLE IF NOT EXISTS hire_requests (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+CREATE INDEX IF NOT EXISTS idx_hire_requests_status ON hire_requests(status);
+CREATE INDEX IF NOT EXISTS idx_hire_requests_created_at ON hire_requests(created_at);
 
 -- Create admins table for single admin user authentication
 CREATE TABLE IF NOT EXISTS admins (

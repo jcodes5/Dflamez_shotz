@@ -52,7 +52,7 @@ A modern, full-stack web application for Akingbade Gold Wuraola (Dflamez Shot) t
   - Supabase PostgreSQL
 
 - **Development Tools**:
-  - pnpm (Package Manager)
+  - npm (Package Manager)
   - ESLint (Code Linting)
   - Prettier (Code Formatting)
 
@@ -61,7 +61,7 @@ A modern, full-stack web application for Akingbade Gold Wuraola (Dflamez Shot) t
 ### Prerequisites
 
 - Node.js >= 18
-- pnpm (recommended) or npm
+- npm
 - Supabase account
 - Cloudinary account
 - Stripe and/or Paystack accounts (for payments)
@@ -76,7 +76,7 @@ cd dfalmez-gallery
 
 2. Install dependencies:
 ```bash
-pnpm install
+npm install
 ```
 
 ### Environment Variables
@@ -88,6 +88,8 @@ Create a `.env.local` file in the root directory with the following variables:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+AUTH_ADMIN_EMAIL=your-admin-email@example.com
+ADMIN_INITIAL_PASSWORD=use-a-long-random-password-at-least-12-characters
 
 # Cloudinary
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
@@ -108,7 +110,7 @@ PAYSTACK_SECRET_KEY=your_paystack_secret_key
 
 1. Run the setup script to initialize your database:
 ```bash
-pnpm setup
+npm run setup
 ```
 
 2. This will:
@@ -140,11 +142,11 @@ dfalmez-gallery/
 
 ## Available Scripts
 
-- `pnpm dev` - Starts the development server
-- `pnpm build` - Builds the application for production
-- `pnpm start` - Starts the production server
-- `pnpm lint` - Runs ESLint
-- `pnpm setup` - Initializes the database and admin user
+- `npm run dev` - Starts the development server
+- `npm run build` - Builds the application for production
+- `npm run start` - Starts the production server
+- `npm run lint` - Runs ESLint
+- `npm run setup` - Initializes the database and admin user
 
 ## Deployment
 

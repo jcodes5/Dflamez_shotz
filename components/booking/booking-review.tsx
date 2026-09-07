@@ -5,8 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, MapPin, User, Mail, Phone, Package } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { Calendar, MapPin, User, Mail, Phone, Package, MessageCircle } from "lucide-react"
 
 interface BookingReviewProps {
   bookingData: any
@@ -14,7 +13,6 @@ interface BookingReviewProps {
 
 export default function BookingReview({ bookingData }: BookingReviewProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const router = useRouter()
 
   const depositAmount = (bookingData.packagePrice * 0.3).toFixed(2)
   const remainingAmount = (bookingData.packagePrice * 0.7).toFixed(2)
@@ -33,8 +31,26 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
 
       if (response.ok) {
         const result = await response.json()
-        // Redirect to payment page with booking ID
-        router.push(`/payment?bookingId=${result.data.id}&amount=${depositAmount}`)
+        const message = encodeURIComponent(
+          [
+            "Hi Dflamez! I would like to confirm this booking:",
+            `Booking ID: ${result.data.id}`,
+            `Name: ${bookingData.clientName}`,
+            `Email: ${bookingData.clientEmail}`,
+            bookingData.clientPhone ? `Phone: ${bookingData.clientPhone}` : null,
+            `Service: ${bookingData.serviceType?.replace("-", " ")}`,
+            `Package: ${bookingData.packageName}`,
+            `Event date: ${new Date(bookingData.eventDate).toLocaleDateString()}`,
+            `Location: ${bookingData.eventLocation}`,
+            `Total price: $${bookingData.packagePrice}`,
+            `Deposit: $${depositAmount}`,
+            bookingData.specialRequests ? `Special requests: ${bookingData.specialRequests}` : null,
+          ]
+            .filter(Boolean)
+            .join("\n"),
+        )
+
+        window.location.href = `https://wa.me/2348106643611?text=${message}`
       } else {
         throw new Error("Failed to create booking")
       }
@@ -170,11 +186,13 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
         <div className="text-center">
           <h4 className="font-semibold mb-2">Ready to Confirm?</h4>
           <p className="text-sm text-muted-foreground mb-4">
-            By confirming, you agree to pay the deposit and our terms of service.
+            Your booking will be saved and sent to Dflamez on WhatsApp for confirmation. Payment arrangements will be
+            handled directly with the admin.
           </p>
 
           <Button onClick={handleConfirmBooking} disabled={isSubmitting} size="lg" className="w-full md:w-auto px-8">
-            {isSubmitting ? "Creating Booking..." : `Confirm & Pay $${depositAmount}`}
+            {isSubmitting ? "Preparing WhatsApp..." : "Send Booking via WhatsApp"}
+            {!isSubmitting && <MessageCircle className="ml-2 h-5 w-5" />}
           </Button>
         </div>
       </Card>

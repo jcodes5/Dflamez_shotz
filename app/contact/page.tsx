@@ -21,6 +21,7 @@ import {
   Send,
   Clock,
 } from "lucide-react"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const socialLinks = [
   {
@@ -142,6 +143,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "Contact" }]} />
 
       {/* Hero Section */}
       <section className="py-20 bg-background">

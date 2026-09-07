@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { type SupabaseClient } from "@supabase/supabase-js"
-import { createApiRouteClient, createServiceRoleClient } from "@/lib/supabase/server"
+import { createServiceRoleClient, isAuthenticatedAdmin, isSupabaseConfigured } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,8 +9,14 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category")
     console.log("GET /api/gallery: Category filter:", category)
 
+    if (!isSupabaseConfigured) {
+      return NextResponse.json({ data: [], error: "Database not configured" }, { status: 503 })
+    }
+
+    // This server-only route is the public gallery boundary. Use the service role
+    // so gallery rows remain readable even when Supabase RLS has no anon policy.
     const supabase = createServiceRoleClient() as SupabaseClient
-    console.log("GET /api/gallery: Service role Supabase client created")
+    console.log("GET /api/gallery: Server Supabase client created")
 
     let query = supabase
       .from("gallery_items")
@@ -41,6 +47,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     console.log("POST /api/gallery: Starting request")
     const body = await request.json()
     const { title, description, imageUrl, category, isFeatured = false } = body
@@ -87,6 +94,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     console.log("DELETE /api/gallery: Starting request")
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
@@ -137,6 +145,7 @@ export async function DELETE(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     console.log("PATCH /api/gallery: Starting request")
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")

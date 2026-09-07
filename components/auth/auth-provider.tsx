@@ -2,53 +2,37 @@
 
 import type React from "react"
 
-import { createContext, useContext, useEffect, useState } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { createContext, useContext } from "react"
+import { useRouter } from "next/navigation"
 
 interface AuthContextType {
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<boolean>
-  logout: () => void
-  isLoading: boolean
+  logout: () => Promise<void>
+  isLoading: false
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const pathname = usePathname()
-
-  useEffect(() => {
-    // Check if user is authenticated on mount
-    const authToken = localStorage.getItem("adminAuth")
-    setIsAuthenticated(authToken === "authenticated")
-    setIsLoading(false)
-
-    // Redirect to login if trying to access admin without auth
-    if (pathname?.startsWith("/admin") && authToken !== "authenticated") {
-      router.push("/login")
-    }
-  }, [pathname, router])
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    // Simple authentication check (in a real app, this would be server-side)
-    if (email === "dfalmez@example.com" && password === "goldsdashboard2024") {
-      localStorage.setItem("adminAuth", "authenticated")
-      setIsAuthenticated(true)
-      return true
-    }
-    return false
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+    return response.ok
   }
 
-  const logout = () => {
-    localStorage.removeItem("adminAuth")
-    setIsAuthenticated(false)
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" })
     router.push("/login")
+    router.refresh()
   }
 
-  return <AuthContext.Provider value={{ isAuthenticated, login, logout, isLoading }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ isAuthenticated: true, login, logout, isLoading: false }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

@@ -14,6 +14,16 @@ export async function initAdminUser() {
     return { success: false, error: 'Missing Supabase environment variables' }
   }
 
+  const adminEmail = process.env.AUTH_ADMIN_EMAIL?.trim().toLowerCase()
+  const adminPassword = process.env.ADMIN_INITIAL_PASSWORD
+
+  if (!adminEmail || !adminPassword || adminPassword.length < 12) {
+    return {
+      success: false,
+      error: 'Set AUTH_ADMIN_EMAIL and ADMIN_INITIAL_PASSWORD (at least 12 characters)',
+    }
+  }
+
   // Create a proper Supabase client for server-side scripts using service role key
   const supabase: SupabaseClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -31,7 +41,40 @@ export async function initAdminUser() {
     return { success: false, error: 'Failed to check existing admins' }
   }
   
-  // If admin already exists, don't create a new one
+  const { data: authUsers, error: authUsersError } = await supabase.auth.admin.listUsers()
+
+  if (authUsersError) {
+    console.error('Error checking Supabase Auth users:', authUsersError)
+    return { success: false, error: 'Failed to check Supabase Auth users' }
+  }
+
+  const authUser = authUsers.users.find((user) => user.email?.toLowerCase() === adminEmail)
+
+  if (!authUser) {
+    const { error: authError } = await supabase.auth.admin.createUser({
+      email: adminEmail,
+      password: adminPassword,
+      email_confirm: true,
+      app_metadata: { role: 'admin' },
+    })
+
+    if (authError) {
+      console.error('Error creating Supabase Auth user:', authError)
+      return { success: false, error: 'Failed to create Supabase Auth user' }
+    }
+  } else {
+    const { error: authError } = await supabase.auth.admin.updateUserById(authUser.id, {
+      password: adminPassword,
+      app_metadata: { ...authUser.app_metadata, role: 'admin' },
+      email_confirm: true,
+    })
+
+    if (authError) {
+      console.error('Error updating Supabase Auth user:', authError)
+      return { success: false, error: 'Failed to update Supabase Auth user' }
+    }
+  }
+
   if (existingAdmins && existingAdmins.length > 0) {
     console.log('Admin user already exists')
     return { success: true, message: 'Admin user already exists' }
@@ -39,15 +82,14 @@ export async function initAdminUser() {
   
   // Hash the password
   const saltRounds = 10
-  const plainPassword = "goldsdashboard2025"
-  const hashedPassword = await bcrypt.hash(plainPassword, saltRounds)
+  const hashedPassword = await bcrypt.hash(adminPassword, saltRounds)
   
   // Create the admin user
   const { data, error } = await supabase
     .from('admins')
     .insert([
       {
-        email: "dflamez@example.com",
+        email: adminEmail,
         password_hash: hashedPassword,
         full_name: "Dflamez Admin"
       }

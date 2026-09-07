@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { uploadToCloudinary } from "@/lib/cloudinary"
-import { createApiRouteClient, createServiceRoleClient } from "@/lib/supabase/server"
+import { createApiRouteClient, createServiceRoleClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
 import { type SupabaseClient } from "@supabase/supabase-js"
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     console.log("POST /api/upload: Starting request")
     const formData = await request.formData()
     const file = formData.get("file") as File
@@ -17,6 +18,15 @@ export async function POST(request: NextRequest) {
     if (!file) {
       console.log("POST /api/upload: No file provided")
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
+    }
+
+    const supportedImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+    if (!supportedImageTypes.includes(file.type)) {
+      return NextResponse.json({ error: "Unsupported image format. Use JPG, PNG, GIF, or WebP." }, { status: 415 })
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "File size exceeds 5MB limit" }, { status: 413 })
     }
 
     // Upload to Cloudinary

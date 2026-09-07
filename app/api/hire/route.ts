@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createApiRouteClient } from "@/lib/supabase/server"
+import { createApiRouteClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
 import { isSupabaseConfigured } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
@@ -129,6 +129,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     if (!isSupabaseConfigured) {
       return NextResponse.json({
         success: false,

@@ -1,10 +1,12 @@
 import { Navbar } from "@/components/navbar"
 import { GalleryGrid } from "@/components/gallery-grid"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function GalleryPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "Gallery" }]} />
 
       {/* Hero section */}
       <section className="py-20 bg-background">

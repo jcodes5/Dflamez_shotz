@@ -52,7 +52,7 @@ export function Navbar() {
         <div className="flex lg:flex-1">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link href="/" className="flex items-center gap-2 p-1.5">
-              <span className="font-serif text-2xl font-bold text-primary">DFLAMEZ</span>
+              <span className="font-brand text-3xl font-normal text-primary">Dflamez</span>
             </Link>
           </motion.div>
         </div>
@@ -140,7 +140,7 @@ export function Navbar() {
             >
               <div className="flex items-center justify-between">
                 <Link href="/" className="p-1.5">
-                  <span className="font-serif text-2xl font-bold text-primary">DFLAMEZ</span>
+                  <span className="font-brand text-3xl font-normal text-primary">Dflamez</span>
                 </Link>
                 <div className="flex items-center gap-2">
                   <ThemeToggle />

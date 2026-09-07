@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import type { Metadata } from "next"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 // Mock blog posts data (in a real app, this would come from a database or CMS)
 const blogPosts = [
@@ -115,6 +117,29 @@ interface BlogPostPageProps {
   }
 }
 
+export function generateMetadata({ params }: BlogPostPageProps): Metadata {
+  const post = blogPosts.find((item) => item.id === params.slug)
+
+  if (!post) {
+    return { title: "Article Not Found" }
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: `/blog/${post.id}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt,
+      images: [{ url: post.image, alt: post.title }],
+      publishedTime: post.publishedAt,
+      authors: [post.author],
+    },
+    twitter: { card: "summary_large_image", images: [post.image] },
+  }
+}
+
 export default function BlogPostPage({ params }: BlogPostPageProps) {
   const post = blogPosts.find((p) => p.id === params.slug)
 
@@ -125,6 +150,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "Gold's Pen", href: "/blog" }, { label: post.title }]} />
 
       {/* Hero Image */}
       <section className="relative h-[60vh] overflow-hidden">

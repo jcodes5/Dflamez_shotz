@@ -45,6 +45,12 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
         toast.error("File size exceeds 5MB limit")
         return
       }
+
+      const supportedImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+      if (!supportedImageTypes.includes(file.type)) {
+        toast.error("Please select a JPG, PNG, GIF, or WebP image")
+        return
+      }
       
       setFormData(prev => ({ ...prev, file }))
       
@@ -236,13 +242,13 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
                   <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
                     <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
                     <p className="mt-2 text-sm text-muted-foreground">
-                      Select an image to upload (max 5MB)
+                      Select a JPG, PNG, GIF, or WebP image (max 5MB)
                     </p>
                     <Input
                       ref={fileInputRef}
                       id="file"
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/png,image/gif,image/webp"
                       onChange={handleFileChange}
                       className="hidden"
                     />

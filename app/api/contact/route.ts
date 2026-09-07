@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createServiceRoleClient, isSupabaseConfigured } from "@/lib/supabase/server"
+import { createServiceRoleClient, isSupabaseConfigured, isAuthenticatedAdmin } from "@/lib/supabase/server"
 
 // Simple in-memory rate limiting (in production, use Redis or database)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
@@ -233,6 +233,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     // Check if Supabase is configured
     if (!isSupabaseConfigured) {
       return NextResponse.json({ 
@@ -288,6 +289,7 @@ export async function GET(request: NextRequest) {
 // Add PUT method to update contact inquiry status
 export async function PUT(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     // Check if Supabase is configured
     if (!isSupabaseConfigured) {
       return NextResponse.json({ error: "Database not configured" }, { status: 500 })
@@ -364,6 +366,7 @@ export async function PUT(request: NextRequest) {
 // Add DELETE method to remove contact inquiries (admin only)
 export async function DELETE(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     // Check if Supabase is configured
     if (!isSupabaseConfigured) {
       return NextResponse.json({ error: "Database not configured" }, { status: 500 })

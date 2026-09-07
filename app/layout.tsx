@@ -1,26 +1,70 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Space_Grotesk, DM_Sans } from "next/font/google"
+import { Allura, Bodoni_Moda, Cormorant_Garamond, Manrope, Sora } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/components/auth/auth-provider"
-import { Footer } from "@/components/footer"
+import { SiteFooter } from "@/components/site-footer"
 
-const spaceGrotesk = Space_Grotesk({
+const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-space-grotesk",
+  variable: "--font-cormorant-garamond",
+  weight: ["400", "500", "600", "700"],
 })
 
-const dmSans = DM_Sans({
+const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-dm-sans",
+  variable: "--font-manrope",
+  weight: ["400", "500", "600", "700", "800"],
+})
+
+const bodoniModa = Bodoni_Moda({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-bodoni-moda",
+  weight: ["400", "500", "600", "700"],
+})
+
+const sora = Sora({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sora",
+  weight: ["400", "500", "600", "700"],
+})
+
+const allura = Allura({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-allura",
+  weight: "400",
 })
 
 export const metadata: Metadata = {
-  title: "Dflamez Shotz - Soul Portraitor & Visual Artist",
-  description: "Professional soul portraits, videography, and photography by Dfalmez Shotz",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com"),
+  title: {
+    default: "Dflamez Shotz | Soul Portraits & Visual Stories",
+    template: "%s | Dflamez Shotz",
+  },
+  description:
+    "Dflamez Shotz creates soulful portraits, photography, and cinematic visual stories in Akure, Nigeria.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Dflamez Shotz",
+    title: "Dflamez Shotz | Soul Portraits & Visual Stories",
+    description:
+      "Soulful portraits, photography, and cinematic visual stories by Dflamez Shotz.",
+    images: [{ url: "/dflamez.png", width: 1200, height: 1200, alt: "Dflamez Shotz portrait" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dflamez Shotz | Soul Portraits & Visual Stories",
+    description: "Soulful portraits and cinematic visual stories by Dflamez Shotz.",
+    images: ["/dflamez.png"],
+  },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({
@@ -29,7 +73,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmSans.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${cormorantGaramond.variable} ${manrope.variable} ${bodoniModa.variable} ${sora.variable} ${allura.variable}`}
+      suppressHydrationWarning
+    >
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
@@ -39,8 +87,29 @@ export default function RootLayout({
           storageKey="dflamez-theme"
         >
           <AuthProvider>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "ProfessionalService",
+                  name: "Dflamez Shotz",
+                  description: "Soul portraits, photography, and cinematic visual storytelling.",
+                  url: process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com",
+                  image: `${process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com"}/dflamez.png`,
+                  email: "hello@dflamezshotz.com",
+                  telephone: "+2348106643611",
+                  address: { "@type": "PostalAddress", addressLocality: "Akure", addressCountry: "NG" },
+                  sameAs: [
+                    "https://instagram.com/dflamez.shotz",
+                    "https://facebook.com/dflamez.shotz",
+                    "https://twitter.com/dflamez_shotz",
+                  ],
+                }),
+              }}
+            />
             {children}
-            <Footer />
+            <SiteFooter />
           </AuthProvider>
         </ThemeProvider>
       </body>

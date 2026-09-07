@@ -29,7 +29,7 @@ export function BlogManager() {
     const fetchBlogPosts = async () => {
       try {
         setLoading(true)
-        const response = await fetch("/api/blog")
+        const response = await fetch("/api/blog?published=false")
         if (!response.ok) {
           throw new Error("Failed to fetch blog posts")
         }

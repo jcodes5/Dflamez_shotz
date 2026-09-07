@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createApiRouteClient } from "@/lib/supabase/server"
+import { createApiRouteClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
 import { isSupabaseConfigured } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
@@ -48,6 +48,7 @@ function validateHireRequestUpdate(data: any) {
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const { id } = params
     
     // Check if Supabase is configured
@@ -99,6 +100,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const { id } = params
     const body = await request.json()
     
@@ -186,6 +188,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const { id } = params
     
     // Check if Supabase is configured

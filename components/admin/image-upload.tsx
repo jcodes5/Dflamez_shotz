@@ -159,14 +159,14 @@ export function ImageUpload({
               {isUploading ? "Uploading..." : placeholder}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              PNG, JPG, GIF up to 5MB
+              PNG, JPG, GIF, WebP up to 5MB
             </p>
             
             <Input
               ref={fileInputRef}
               id="image-upload"
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/gif,image/webp"
               onChange={handleFileChange}
               className="hidden"
               disabled={disabled || isUploading}

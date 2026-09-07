@@ -66,7 +66,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.1 }}
             >
-              I'm <span className="text-primary font-bold">Dflamez Shot</span>, capturing the essence of souls through
+              I'm <span className="home-script text-primary text-2xl sm:text-3xl">Dflamez Shot</span>, capturing the essence of souls through
               powerful portraits, cinematic videography, and authentic photography that reveals the true spirit within.
             </motion.p>
 

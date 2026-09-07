@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createApiRouteClient } from "@/lib/supabase/server"
+import { createApiRouteClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest) {
   try {
@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const body = await request.json()
     const { title, slug, excerpt, content, featuredImage, category, tags, published = false } = body
 

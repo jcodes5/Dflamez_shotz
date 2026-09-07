@@ -10,6 +10,7 @@ import PackageSelection from "@/components/booking/package-selection"
 import EventDetails from "@/components/booking/event-details"
 import ContactInfo from "@/components/booking/contact-info"
 import BookingReview from "@/components/booking/booking-review"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const steps = [
   { id: 1, title: "Service", component: ServiceSelection },
@@ -54,6 +55,7 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-background py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
+        <Breadcrumbs items={[{ label: "Book a Session" }]} />
         <div className="mb-8 sm:mb-12">
           <div className="flex items-center justify-between mb-4 overflow-x-auto pb-2">
             {steps.map((step, index) => (

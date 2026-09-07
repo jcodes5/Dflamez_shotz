@@ -11,6 +11,7 @@ import { HireForm } from "@/components/hire/hire-form"
 import { HireButton, HireModal } from "@/components/hire/hire-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { services as hireServices } from "@/lib/services"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<string | null>(null)
@@ -23,6 +24,7 @@ export default function ServicesPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
+      <Breadcrumbs items={[{ label: "Services" }]} />
 
       {/* Hero Section */}
       <section className="py-20 bg-background">
