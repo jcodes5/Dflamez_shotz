@@ -65,7 +65,7 @@ export default function PaymentForm({ bookingId, amount }: PaymentFormProps) {
         <div className="bg-primary/5 p-4 rounded-lg mb-6">
           <div className="flex items-center justify-between">
             <span className="font-medium">Deposit Amount:</span>
-            <span className="text-2xl font-bold text-primary">${amount.toFixed(2)}</span>
+            <span className="text-2xl font-bold text-primary">₦{amount.toFixed(2)}</span>
           </div>
           <p className="text-sm text-muted-foreground mt-1">30% deposit to secure your booking</p>
         </div>
@@ -92,7 +92,7 @@ export default function PaymentForm({ bookingId, amount }: PaymentFormProps) {
             ) : (
               <>
                 <CreditCard className="w-4 h-4 mr-2" />
-                Pay ${amount.toFixed(2)}
+                Pay ₦{amount.toFixed(2)}
               </>
             )}
           </Button>

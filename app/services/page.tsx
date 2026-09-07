@@ -97,7 +97,7 @@ export default function ServicesPage() {
 
                 <div className="border-t border-border pt-6">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-serif text-2xl font-bold text-primary">Starting at ${service.basePrice}</span>
+                    <span className="font-serif text-2xl font-bold text-primary">Starting at ₦{service.basePrice}</span>
                   </div>
                   <div className="flex gap-2">
                     <Button

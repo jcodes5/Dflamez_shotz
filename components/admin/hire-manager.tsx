@@ -96,7 +96,7 @@ export function HireManager() {
         if (r.estimated_cost) {
           return sum + r.estimated_cost
         }
-        const budget = r.budget || '$0'
+        const budget = r.budget || '₦0'
         const amount = parseInt(budget.replace(/[^0-9]/g, '')) || 0
         return sum + amount
       }, 0)
@@ -262,7 +262,7 @@ export function HireManager() {
                   {request.estimated_cost && (
                     <div className="flex items-center gap-2">
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-foreground font-semibold">Est. Cost: ${request.estimated_cost}</span>
+                      <span className="text-sm text-foreground font-semibold">Est. Cost: ₦{request.estimated_cost}</span>
                     </div>
                   )}
                 </div>

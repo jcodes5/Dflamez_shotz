@@ -181,7 +181,7 @@ export function HireForm({
             data.addOns && data.addOns.length > 0 ? `Add-ons: ${data.addOns.map(id => addOns.find(a => a.id === id)?.name).filter(Boolean).join(", ")}` : null,
             `Contact Preference: ${data.contactPreference}`,
             `Message: ${data.message}`,
-            `Estimated Cost: $${calculateTotalCost()}`,
+            `Estimated Cost: ₦${calculateTotalCost()}`,
             "",
             "Please confirm receipt and let me know next steps."
           ]
@@ -312,7 +312,7 @@ export function HireForm({
                         </div>
                         <div className="pt-2 border-t">
                           <div className="font-serif text-xl font-bold text-primary">
-                            ${service.basePrice}+
+                            ₦{service.basePrice}+
                           </div>
                         </div>
                       </div>
@@ -347,7 +347,7 @@ export function HireForm({
                               />
                               <span className="text-sm font-medium">{addOn.name}</span>
                             </div>
-                            <Badge variant="outline" className="text-xs">+${addOn.price}</Badge>
+                            <Badge variant="outline" className="text-xs">+₦{addOn.price}</Badge>
                           </div>
                         ))}
                       </div>
@@ -358,11 +358,11 @@ export function HireForm({
                             <span className="font-semibold">Estimated Total:</span>
                             <div className="text-right">
                               <div className="text-xl font-bold text-primary">
-                                ${calculateTotalCost()}
+                                ₦{calculateTotalCost()}
                               </div>
                               <div className="text-xs text-muted-foreground">
-                                Base: ${services.find(s => s.id === selectedService)?.basePrice} + 
-                                Add-ons: ${selectedAddOns.reduce((sum, id) => sum + (addOns.find(a => a.id === id)?.price || 0), 0)}
+                                Base: ₦{services.find(s => s.id === selectedService)?.basePrice} + 
+                                Add-ons: ₦{selectedAddOns.reduce((sum, id) => sum + (addOns.find(a => a.id === id)?.price || 0), 0)}
                               </div>
                             </div>
                           </div>
@@ -465,11 +465,11 @@ export function HireForm({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="under-500">Under $500</SelectItem>
-                          <SelectItem value="500-1000">$500 - $1,000</SelectItem>
-                          <SelectItem value="1000-1500">$1,000 - $1,500</SelectItem>
-                          <SelectItem value="1500-2500">$1,500 - $2,500</SelectItem>
-                          <SelectItem value="2500-plus">$2,500+</SelectItem>
+                          <SelectItem value="under-500">Under ₦500</SelectItem>
+                          <SelectItem value="500-1000">₦500 - ₦1,000</SelectItem>
+                          <SelectItem value="1000-1500">₦1,000 - ₦1,500</SelectItem>
+                          <SelectItem value="1500-2500">₦1,500 - ₦2,500</SelectItem>
+                          <SelectItem value="2500-plus">₦2,500+</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

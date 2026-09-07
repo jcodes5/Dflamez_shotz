@@ -72,11 +72,11 @@ function SuccessContent() {
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center">
                   <span>Deposit Paid:</span>
-                  <span className="font-bold text-green-600">${booking.deposit_amount}</span>
+                  <span className="font-bold text-green-600">₦{booking.deposit_amount}</span>
                 </div>
                 <div className="flex justify-between items-center text-muted-foreground">
                   <span>Remaining Balance:</span>
-                  <span>${(booking.package_price - booking.deposit_amount).toFixed(2)}</span>
+                  <span>₦{(booking.package_price - booking.deposit_amount).toFixed(2)}</span>
                 </div>
               </div>
             </div>

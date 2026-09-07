@@ -62,9 +62,9 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
             `Package: ${bookingData.packageName}`,
             `Event date: ${new Date(bookingData.eventDate).toLocaleDateString()}`,
             `Location: ${bookingData.eventLocation}`,
-            `Total price: $${bookingData.packagePrice}`,
-            `Deposit (30%): $${depositAmount}`,
-            `Remaining balance: $${remainingAmount}`,
+            `Total price: ₦${bookingData.packagePrice}`,
+            `Deposit (30%): ₦${depositAmount}`,
+            `Remaining balance: ₦${remainingAmount}`,
             bookingData.specialRequests ? `Special requests: ${bookingData.specialRequests}` : null,
             "",
             "I understand that payment and final confirmation will be handled directly with you on WhatsApp."
@@ -116,7 +116,7 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
 
             <div className="flex justify-between items-center">
               <span className="font-medium">Total Price:</span>
-              <span className="text-xl font-bold text-primary">${bookingData.packagePrice}</span>
+              <span className="text-xl font-bold text-primary">₦{bookingData.packagePrice}</span>
             </div>
           </div>
         </Card>
@@ -182,12 +182,12 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span>Deposit (30%)</span>
-              <span className="font-medium">${depositAmount}</span>
+              <span className="font-medium">₦{depositAmount}</span>
             </div>
 
             <div className="flex justify-between text-muted-foreground">
               <span>Remaining Balance</span>
-              <span>${remainingAmount}</span>
+              <span>₦{remainingAmount}</span>
             </div>
 
             <Separator />
@@ -195,7 +195,7 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
             <div className="flex justify-between items-center">
               <span className="font-medium">Due Today:</span>
               <Badge variant="secondary" className="text-lg px-3 py-1">
-                ${depositAmount}
+                ₦{depositAmount}
               </Badge>
             </div>
 

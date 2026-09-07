@@ -96,7 +96,7 @@ function PaymentContent() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Complete Your Payment</h1>
-          <p className="text-muted-foreground">Secure your booking with a ${amount} deposit</p>
+          <p className="text-muted-foreground">Secure your booking with a ₦{amount} deposit</p>
         </div>
 
         {clientSecret && (

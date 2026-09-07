@@ -79,7 +79,7 @@ export function HireModal({ open, onOpenChange, selectedService = null }: HireMo
               </div>
               <div className="text-right">
                 <div className="font-bold text-primary">
-                  ${services.find(s => s.id === selectedService)?.basePrice}+
+                  ₦{services.find(s => s.id === selectedService)?.basePrice}+
                 </div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Clock className="h-3 w-3" />

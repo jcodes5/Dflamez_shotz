@@ -165,7 +165,7 @@ export default function PackageSelection({ bookingData, updateBookingData, onNex
 
               <div className="text-center mb-6">
                 <h3 className="text-xl font-bold mb-2">{pkg.name}</h3>
-                <div className="text-3xl font-bold text-primary mb-1">${pkg.price}</div>
+                <div className="text-3xl font-bold text-primary mb-1">₦{pkg.price}</div>
                 <p className="text-muted-foreground text-sm">{pkg.duration}</p>
               </div>
 
@@ -180,7 +180,7 @@ export default function PackageSelection({ bookingData, updateBookingData, onNex
 
               <div className="border-t pt-4 mb-4">
                 <p className="text-sm text-muted-foreground text-center">
-                  Deposit required: <span className="font-semibold text-primary">${depositAmount}</span> (30%)
+                  Deposit required: <span className="font-semibold text-primary">₦{depositAmount}</span> (30%)
                 </p>
               </div>
 

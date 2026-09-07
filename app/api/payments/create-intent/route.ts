@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
 
     // Create payment intent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency: "usd",
+      amount: Math.round(amount * 100), // Convert to kobo
+      currency: "ngn",
       metadata: {
         bookingId,
         paymentType,
