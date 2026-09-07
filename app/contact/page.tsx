@@ -150,7 +150,7 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
           <h1 className="font-serif text-5xl font-black tracking-tight text-foreground sm:text-7xl mb-6">
             <span className="block">LET'S</span>
-            <span className="block text-primary transform -rotate-1 inline-block">CONNECT</span>
+            <span className="text-primary transform -rotate-1 inline-block">CONNECT</span>
           </h1>
           <p className="text-xl leading-8 text-muted-foreground max-w-2xl mx-auto mb-8">
             Ready to capture your story? I'd love to hear about your vision and bring it to life through powerful
@@ -344,7 +344,7 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
           <h2 className="font-serif text-4xl font-black text-foreground mb-6">
             <span className="block">FOLLOW MY</span>
-            <span className="block text-primary transform rotate-1 inline-block">JOURNEY</span>
+            <span className="text-primary transform rotate-1 inline-block">JOURNEY</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-12">
             Stay connected and see behind-the-scenes content from my latest sessions.

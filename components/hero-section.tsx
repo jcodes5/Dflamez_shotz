@@ -35,7 +35,7 @@ export function HeroSection() {
                 SOUL
               </motion.span>
               <motion.span
-                className="block text-primary transform -rotate-2 inline-block"
+                className=" text-primary transform -rotate-2 inline-block"
                 initial={{ opacity: 0, y: 20, rotate: 0 }}
                 animate={{ opacity: 1, y: 0, rotate: -2 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
@@ -51,7 +51,7 @@ export function HeroSection() {
                 & VISUAL
               </motion.span>
               <motion.span
-                className="block text-primary transform rotate-1 inline-block"
+                className="text-primary transform rotate-1 inline-block"
                 initial={{ opacity: 0, y: 20, rotate: 0 }}
                 animate={{ opacity: 1, y: 0, rotate: 1 }}
                 transition={{ duration: 0.6, delay: 0.9 }}

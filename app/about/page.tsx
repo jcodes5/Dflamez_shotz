@@ -42,7 +42,7 @@ export default function AboutPage() {
             <div>
               <h1 className="font-serif text-5xl font-black tracking-tight text-foreground sm:text-7xl mb-6">
                 <span className="block">ABOUT</span>
-                <span className="block text-primary transform -rotate-1 inline-block">DFLAMEZ</span>
+                <span className="text-primary transform -rotate-1 inline-block">DFLAMEZ</span>
               </h1>
               <p className="text-xl leading-8 text-muted-foreground mb-8">
                 Soul Portraitor, Visual Storyteller, and Artistic Visionary
@@ -110,7 +110,7 @@ export default function AboutPage() {
             <div>
               <h2 className="font-serif text-4xl font-black text-foreground mb-6">
                 <span className="block">MY</span>
-                <span className="block text-primary transform rotate-1 inline-block">PHILOSOPHY</span>
+                <span className="text-primary transform rotate-1 inline-block">PHILOSOPHY</span>
               </h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">

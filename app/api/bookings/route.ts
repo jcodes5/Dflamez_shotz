@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,10 +19,20 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!clientName || !clientEmail || !serviceType || !packageName || !packagePrice) {
-      return NextResponse.json({ error: "Missing required booking information" }, { status: 400 })
+      return NextResponse.json(
+        { success: false, message: "Missing required booking information" },
+        { status: 400 }
+      )
     }
 
-    const supabase = createClient()
+    const client = await createClient()
+    if (!('from' in client)) {
+      return NextResponse.json(
+        { success: false, message: "Supabase client is not properly initialized" },
+        { status: 500 }
+      )
+    }
+    const supabase = client as SupabaseClient
 
     // Calculate 30% deposit
     const depositAmount = (Number.parseFloat(packagePrice) * 0.3).toFixed(2)
@@ -45,30 +56,42 @@ export async function POST(request: NextRequest) {
         },
       ])
       .select()
+      .single()
 
     if (error) {
       console.error("Database error:", error)
-      return NextResponse.json({ error: "Failed to create booking" }, { status: 500 })
+      return NextResponse.json(
+        { success: false, message: "Failed to create booking" },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json(
       {
+        success: true,
         message: "Booking created successfully",
-        data: data[0],
+        data: data,
         depositAmount: Number.parseFloat(depositAmount),
       },
       { status: 201 },
     )
   } catch (error) {
     console.error("API error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    )
   }
 }
 
 export async function GET() {
   try {
     if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    const supabase = createClient()
+    const client = await createClient()
+    if (!('from' in client)) {
+      return NextResponse.json({ success: false, message: "Supabase client is not properly initialized" }, { status: 500 })
+    }
+    const supabase = client as SupabaseClient
 
     // Get all bookings (admin only)
     const { data, error } = await supabase

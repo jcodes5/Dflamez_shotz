@@ -15,7 +15,7 @@ export default function HirePage() {
         <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
           <h1 className="font-serif text-5xl font-black tracking-tight text-foreground sm:text-6xl mb-6">
             <span className="block">LET'S CREATE</span>
-            <span className="block text-primary transform rotate-1 inline-block">
+            <span className=" text-primary transform rotate-1 inline-block">
               SOMETHING AMAZING
             </span>
           </h1>

@@ -5,10 +5,28 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, MapPin, User, Mail, Phone, Package, MessageCircle } from "lucide-react"
+import { Calendar, MapPin, User, Mail, Phone, Package, MessageCircle, AlertCircle } from "lucide-react"
+import { toast } from "sonner"
+
+interface BookingData {
+  serviceType: string
+  packageName: string
+  packagePrice: number
+  eventDate: string
+  eventLocation: string
+  specialRequests: string
+  clientName: string
+  clientEmail: string
+  clientPhone: string
+}
 
 interface BookingReviewProps {
-  bookingData: any
+  bookingData: BookingData
+  onNext?: () => void
+  onPrev?: () => void
+  isFirstStep?: boolean
+  isLastStep?: boolean
+  updateBookingData?: (data: Partial<BookingData>) => void
 }
 
 export default function BookingReview({ bookingData }: BookingReviewProps) {
@@ -29,12 +47,14 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
         body: JSON.stringify(bookingData),
       })
 
-      if (response.ok) {
-        const result = await response.json()
+      const result = await response.json()
+
+      if (response.ok && result.success && result.data) {
+        const booking = result.data
         const message = encodeURIComponent(
           [
             "Hi Dflamez! I would like to confirm this booking:",
-            `Booking ID: ${result.data.id}`,
+            `Booking ID: ${booking.id}`,
             `Name: ${bookingData.clientName}`,
             `Email: ${bookingData.clientEmail}`,
             bookingData.clientPhone ? `Phone: ${bookingData.clientPhone}` : null,
@@ -43,20 +63,24 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
             `Event date: ${new Date(bookingData.eventDate).toLocaleDateString()}`,
             `Location: ${bookingData.eventLocation}`,
             `Total price: $${bookingData.packagePrice}`,
-            `Deposit: $${depositAmount}`,
+            `Deposit (30%): $${depositAmount}`,
+            `Remaining balance: $${remainingAmount}`,
             bookingData.specialRequests ? `Special requests: ${bookingData.specialRequests}` : null,
+            "",
+            "I understand that payment and final confirmation will be handled directly with you on WhatsApp."
           ]
             .filter(Boolean)
             .join("\n"),
         )
 
-        window.location.href = `https://wa.me/2348106643611?text=${message}`
+        window.open(`https://wa.me/2348106643611?text=${message}`, "_blank")
+        toast.success("Booking submitted! Opening WhatsApp...")
       } else {
-        throw new Error("Failed to create booking")
+        throw new Error(result.message || result.error || "Failed to create booking")
       }
     } catch (error) {
       console.error("Booking error:", error)
-      alert("There was an error creating your booking. Please try again.")
+      toast.error(error instanceof Error ? error.message : "There was an error creating your booking. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -191,8 +215,17 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
           </p>
 
           <Button onClick={handleConfirmBooking} disabled={isSubmitting} size="lg" className="w-full md:w-auto px-8">
-            {isSubmitting ? "Preparing WhatsApp..." : "Send Booking via WhatsApp"}
-            {!isSubmitting && <MessageCircle className="ml-2 h-5 w-5" />}
+            {isSubmitting ? (
+              <>
+                <span className="animate-spin mr-2">⏳</span>
+                Submitting...
+              </>
+            ) : (
+              <>
+                Send Booking via WhatsApp
+                <MessageCircle className="ml-2 h-5 w-5" />
+              </>
+            )}
           </Button>
         </div>
       </Card>

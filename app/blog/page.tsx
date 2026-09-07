@@ -99,7 +99,7 @@ const BlogPage = () => {
               <PenTool className="h-8 w-8 text-primary-foreground" />
             </div>
             <h1 className="font-serif text-5xl font-black tracking-tight text-foreground sm:text-7xl">
-              <span className="block text-primary transform -rotate-1 inline-block">GOLD'S</span>
+              <span className="text-primary transform -rotate-1 inline-block">GOLD'S</span>
               <span className="block">PEN</span>
             </h1>
           </div>
@@ -133,7 +133,7 @@ const BlogPage = () => {
         <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
           <h2 className="font-serif text-4xl font-black text-foreground mb-6">
             <span className="block">STAY</span>
-            <span className="block text-primary transform rotate-1 inline-block">INSPIRED</span>
+            <span className="text-primary transform rotate-1 inline-block">INSPIRED</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
             Get notified when I publish new articles and insights from my creative journey.

@@ -31,7 +31,7 @@ export default function ServicesPage() {
         <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
           <h1 className="font-serif text-5xl font-black tracking-tight text-foreground sm:text-7xl mb-6">
             <span className="block">MY</span>
-            <span className="block text-primary transform -rotate-1 inline-block">SERVICES</span>
+            <span className=" text-primary transform -rotate-1 inline-block">SERVICES</span>
           </h1>
           <p className="text-xl leading-8 text-muted-foreground max-w-2xl mx-auto mb-8">
             Professional photography and videography services designed to capture your authentic self and tell your
@@ -130,7 +130,7 @@ export default function ServicesPage() {
           <div className="text-center mb-12">
             <h2 className="font-serif text-4xl font-black text-foreground mb-6">
               <span className="block">READY TO GET</span>
-              <span className="block text-primary transform rotate-1 inline-block">STARTED?</span>
+              <span className=" text-primary transform rotate-1 inline-block">STARTED?</span>
             </h2>
             <p className="text-xl text-muted-foreground">Fill out the form below and I'll get back to you within 24 hours</p>
           </div>

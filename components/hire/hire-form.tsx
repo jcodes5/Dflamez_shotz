@@ -139,6 +139,8 @@ export function HireForm({
         if (uploadResponse.ok) {
           const uploadResult = await uploadResponse.json()
           uploadedImages = uploadResult.urls || []
+        } else {
+          throw new Error("Failed to upload reference images")
         }
       }
 
@@ -159,8 +161,38 @@ export function HireForm({
 
       const result = await response.json()
 
-      if (result.success) {
+      if (result.success && result.data) {
         toast.success("Hire request submitted successfully!")
+        
+        // Generate WhatsApp message with all hire details
+        const hireData = result.data
+        const whatsappMessage = encodeURIComponent(
+          [
+            "Hi Dflamez! I've submitted a hire request:",
+            `Hire Request ID: ${hireData.id}`,
+            `Name: ${data.clientName}`,
+            `Email: ${data.email}`,
+            data.phone ? `Phone: ${data.phone}` : null,
+            `Service: ${services.find(s => s.id === data.serviceType)?.name || data.serviceType}`,
+            `Budget: ${data.budget}`,
+            data.preferredDate ? `Preferred Date: ${new Date(data.preferredDate).toLocaleDateString()}` : null,
+            data.location ? `Location: ${data.location}` : null,
+            `Styles: ${data.style.join(", ")}`,
+            data.addOns && data.addOns.length > 0 ? `Add-ons: ${data.addOns.map(id => addOns.find(a => a.id === id)?.name).filter(Boolean).join(", ")}` : null,
+            `Contact Preference: ${data.contactPreference}`,
+            `Message: ${data.message}`,
+            `Estimated Cost: $${calculateTotalCost()}`,
+            "",
+            "Please confirm receipt and let me know next steps."
+          ]
+            .filter(Boolean)
+            .join("\n")
+        )
+
+        // Open WhatsApp
+        window.open(`https://wa.me/2348106643611?text=${whatsappMessage}`, "_blank")
+        
+        // Reset form after successful submission and WhatsApp redirect
         form.reset()
         setSelectedService(initialService || null)
         setSelectedAddOns([])
