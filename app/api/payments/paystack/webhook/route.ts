@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 import crypto from "crypto"
 
 export async function POST(request: NextRequest) {
@@ -20,7 +21,11 @@ export async function POST(request: NextRequest) {
       const { reference, amount, customer, metadata } = event.data
       const bookingId = metadata.booking_id
 
-      const supabase = createClient()
+      const client = await createClient()
+      if (!('from' in client)) {
+        return NextResponse.json({ error: "Supabase client is not properly initialized" }, { status: 500 })
+      }
+      const supabase = client as SupabaseClient
 
       // Update payment status
       await supabase

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,7 +42,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Update booking with payment reference
-    const supabase = createClient()
+    const client = await createClient()
+    if (!('from' in client)) {
+      return NextResponse.json({ error: "Supabase client is not properly initialized" }, { status: 500 })
+    }
+    const supabase = client as SupabaseClient
+
     await supabase.from("payments").insert({
       booking_id: bookingId,
       amount,

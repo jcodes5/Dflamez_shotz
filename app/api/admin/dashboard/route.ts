@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createServiceRoleClient, isAuthenticatedAdmin, isSupabaseConfigured } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 type Activity = {
   type: "hire" | "contact" | "gallery" | "blog"
@@ -12,7 +13,12 @@ export async function GET() {
     if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     if (!isSupabaseConfigured) return NextResponse.json({ error: "Database not configured" }, { status: 503 })
 
-    const supabase = createServiceRoleClient()
+    const client = createServiceRoleClient()
+    if (!('from' in client)) {
+      return NextResponse.json({ error: "Supabase client is not properly initialized" }, { status: 500 })
+    }
+    const supabase = client as SupabaseClient
+
     const startOfMonth = new Date()
     startOfMonth.setDate(1)
     startOfMonth.setHours(0, 0, 0, 0)
@@ -44,10 +50,10 @@ export async function GET() {
     if (queryError) throw queryError
 
     const activity: Activity[] = [
-      ...(recentHires.data ?? []).map((item) => ({ type: "hire" as const, message: `New hire request from ${item.client_name}`, created_at: item.created_at })),
-      ...(recentContacts.data ?? []).map((item) => ({ type: "contact" as const, message: `Contact form submission from ${item.name}`, created_at: item.created_at })),
-      ...(recentGallery.data ?? []).map((item) => ({ type: "gallery" as const, message: `Uploaded “${item.title}” to the gallery`, created_at: item.created_at })),
-      ...(recentBlog.data ?? []).map((item) => ({ type: "blog" as const, message: `Created “${item.title}”`, created_at: item.created_at })),
+      ...(recentHires.data ?? []).map((item: { client_name: string; created_at: string }) => ({ type: "hire" as const, message: `New hire request from ${item.client_name}`, created_at: item.created_at })),
+      ...(recentContacts.data ?? []).map((item: { name: string; created_at: string }) => ({ type: "contact" as const, message: `Contact form submission from ${item.name}`, created_at: item.created_at })),
+      ...(recentGallery.data ?? []).map((item: { title: string; created_at: string }) => ({ type: "gallery" as const, message: `Uploaded \u201c${item.title}\u201d to the gallery`, created_at: item.created_at })),
+      ...(recentBlog.data ?? []).map((item: { title: string; created_at: string }) => ({ type: "blog" as const, message: `Created \u201c${item.title}\u201d`, created_at: item.created_at })),
     ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6)
 
     return NextResponse.json({

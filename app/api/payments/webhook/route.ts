@@ -1,9 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-06-20",
+  apiVersion: "2025-07-30.basil",
 })
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
@@ -21,7 +22,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
   }
 
-  const supabase = createClient()
+  const client = await createClient()
+  if (!('from' in client)) {
+    return NextResponse.json({ error: "Supabase client is not properly initialized" }, { status: 500 })
+  }
+  const supabase = client as SupabaseClient
 
   try {
     switch (event.type) {

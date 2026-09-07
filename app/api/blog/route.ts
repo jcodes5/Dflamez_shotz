@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createApiRouteClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,7 +8,11 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category")
     const published = searchParams.get("published") !== "false"
 
-    const supabase = createApiRouteClient()
+    const client = createApiRouteClient()
+    if (!('from' in client)) {
+      return NextResponse.json({ error: "Supabase client is not properly initialized" }, { status: 500 })
+    }
+    const supabase = client as SupabaseClient
 
     let query = supabase.from("blog_posts").select("*").order("created_at", { ascending: false })
 
@@ -44,7 +49,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title, slug, and content are required" }, { status: 400 })
     }
 
-    const supabase = createApiRouteClient()
+    const client = createApiRouteClient()
+    if (!('from' in client)) {
+      return NextResponse.json({ error: "Supabase client is not properly initialized" }, { status: 500 })
+    }
+    const supabase = client as SupabaseClient
 
     // Insert the blog post into the database
     const { data, error } = await supabase

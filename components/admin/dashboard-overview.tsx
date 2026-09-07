@@ -37,7 +37,7 @@ function formatActivityTime(date: string) {
   return `${days} day${days === 1 ? "" : "s"} ago`
 }
 
-export function DashboardOverview({ onNavigate }: { onNavigate: (section: AdminSection) => void }) {
+export function DashboardOverview({ onNavigate }: { onNavigate?: (section: AdminSection) => void }) {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -107,7 +107,7 @@ export function DashboardOverview({ onNavigate }: { onNavigate: (section: AdminS
           <h3 className="mb-6 font-serif text-xl font-bold text-foreground">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-4">
             {quickActions.map((action) => (
-              <Button key={action.section} variant="outline" className="h-auto flex-col gap-2 p-4 hover:bg-muted" onClick={() => onNavigate(action.section)}>
+              <Button key={action.section} variant="outline" className="h-auto flex-col gap-2 p-4 hover:bg-muted" onClick={() => onNavigate?.(action.section)}>
                 <action.icon className="h-6 w-6 text-primary" />
                 <div className="text-center"><p className="text-sm font-semibold">{action.name}</p><p className="text-xs text-muted-foreground">{action.description}</p></div>
               </Button>
