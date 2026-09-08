@@ -112,13 +112,14 @@ In a world that never stops moving, there's profound power in choosing to pause.
 ]
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
-export function generateMetadata({ params }: BlogPostPageProps): Metadata {
-  const post = blogPosts.find((item) => item.id === params.slug)
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const post = blogPosts.find((item) => item.id === slug)
 
   if (!post) {
     return { title: "Article Not Found" }
@@ -140,8 +141,9 @@ export function generateMetadata({ params }: BlogPostPageProps): Metadata {
   }
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = blogPosts.find((p) => p.id === params.slug)
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params
+  const post = blogPosts.find((p) => p.id === slug)
 
   if (!post) {
     notFound()

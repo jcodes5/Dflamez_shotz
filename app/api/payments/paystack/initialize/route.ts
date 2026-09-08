@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         email,
         amount: amount * 100, // Paystack expects amount in kobo
         reference: `booking_${bookingId}_${Date.now()}`,
-        callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
+        callback_url: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
         metadata: {
           booking_id: bookingId,
           custom_fields: [

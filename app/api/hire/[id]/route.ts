@@ -46,10 +46,10 @@ function validateHireRequestUpdate(data: any) {
   return errors
 }
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    const { id } = params
+    const { id } = await params
     
     // Check if Supabase is configured
     if (!isSupabaseConfigured) {
@@ -98,10 +98,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     
     // Check if Supabase is configured
@@ -186,10 +186,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!(await isAuthenticatedAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    const { id } = params
+    const { id } = await params
     
     // Check if Supabase is configured
     if (!isSupabaseConfigured) {
