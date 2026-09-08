@@ -22,6 +22,21 @@ interface BlogPost {
   image: string
 }
 
+const fallbackPosts: BlogPost[] = [
+    {
+      id: "the-art-of-seeing-souls",
+      title: "The Art of Seeing Souls",
+      excerpt: "What does it mean to truly see someone? In my years as a soul portraitor, I've learned that the most powerful images come from moments of genuine connection...",
+      content: `What does it mean to truly see someone? In my years as a soul portraitor, I've learned that the most powerful images come from moments of genuine connection.`,
+      category: "Photography",
+      tags: ["editorial", "philosophy", "connection"],
+      author: "Dflamez Photography",
+      publishedAt: "2024-01-15",
+      readTime: "5 min read",
+      image: "/blog-featured-image-1.png",
+    }
+  ]
+
 const BlogPage = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
@@ -70,21 +85,6 @@ const BlogPage = () => {
   const filteredPosts = selectedCategory === "All"
     ? blogPosts
     : blogPosts.filter(post => post.category === selectedCategory)
-
-  const fallbackPosts = [
-    {
-      id: "the-art-of-seeing-souls",
-      title: "The Art of Seeing Souls",
-      excerpt: "What does it mean to truly see someone? In my years as a soul portraitor, I've learned that the most powerful images come from moments of genuine connection...",
-      content: `What does it mean to truly see someone? In my years as a soul portraitor, I've learned that the most powerful images come from moments of genuine connection.`,
-      category: "Photography",
-      tags: ["editorial", "philosophy", "connection"],
-      author: "Dflamez Photography",
-      publishedAt: "2024-01-15",
-      readTime: "5 min read",
-      image: "/blog-featured-image-1.png",
-    }
-  ]
 
   return (
     <main className="min-h-screen bg-background">

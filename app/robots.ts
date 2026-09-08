@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com"
 
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin/", "/api/", "/login", "/payment/"] }],
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin/", "/api/", "/login"] }],
     sitemap: `${baseUrl}/sitemap.xml`,
   }
 }
