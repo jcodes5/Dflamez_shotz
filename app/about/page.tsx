@@ -156,7 +156,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-[4/5] bg-muted rounded-lg overflow-hidden transform -rotate-1">
                 <img
-                  src="/bw-emotional-portrait.png"
+                  src="/about.webp"
                   alt="Artistic Portrait Example"
                   className="w-full h-full object-cover"
                 />
