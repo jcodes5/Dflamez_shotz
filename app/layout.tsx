@@ -44,24 +44,24 @@ const allura = Allura({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com"),
   title: {
-    default: "Dflamez Shotz | Soul Portraits & Visual Stories",
-    template: "%s | Dflamez Shotz",
+    default: "Dflamez Photography | Afrocentric Editorial & Fashion Photographer",
+    template: "%s | Dflamez Photography",
   },
   description:
-    "Dflamez Shotz creates soulful portraits, photography, and cinematic visual stories in Akure, Nigeria.",
+    "Dflamez Photography (Dflamez Shotz) is an Afrocentric editorial & fashion photographer based in Lagos + Akure, Nigeria. Available for collabs & travel.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    siteName: "Dflamez Shotz",
-    title: "Dflamez Shotz | Soul Portraits & Visual Stories",
+    siteName: "Dflamez Photography",
+    title: "Dflamez Photography | Afrocentric Editorial & Fashion Photographer",
     description:
-      "Soulful portraits, photography, and cinematic visual stories by Dflamez Shotz.",
-    images: [{ url: "/dflamez.png", width: 1200, height: 1200, alt: "Dflamez Shotz portrait" }],
+      "Afrocentric editorial & fashion photography by Dflamez Photography. Lagos + Akure, Nigeria. Available for collabs & travel.",
+    images: [{ url: "/dflamez.png", width: 1200, height: 1200, alt: "Dflamez Photography portrait" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dflamez Shotz | Soul Portraits & Visual Stories",
-    description: "Soulful portraits and cinematic visual stories by Dflamez Shotz.",
+    title: "Dflamez Photography | Afrocentric Editorial & Fashion Photographer",
+    description: "Afrocentric editorial & fashion photography by Dflamez Photography.",
     images: ["/dflamez.png"],
   },
   robots: { index: true, follow: true },
@@ -93,13 +93,13 @@ export default function RootLayout({
                 __html: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "ProfessionalService",
-                  name: "Dflamez Shotz",
-                  description: "Soul portraits, photography, and cinematic visual storytelling.",
+                  name: "Dflamez Photography",
+                  description: "Afrocentric editorial & fashion photography. Lagos + Akure, Nigeria. Available for collabs & travel.",
                   url: process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com",
                   image: `${process.env.NEXT_PUBLIC_SITE_URL || "https://dflamezshotz.com"}/dflamez.png`,
-                  email: "hello@dflamezshotz.com",
+                  email: "dflameshot@gmail.com",
                   telephone: "+2348106643611",
-                  address: { "@type": "PostalAddress", addressLocality: "Akure", addressCountry: "NG" },
+                  address: { "@type": "PostalAddress", addressLocality: "Lagos", addressRegion: "Lagos + Akure", addressCountry: "NG" },
                   sameAs: [
                     "https://instagram.com/dflamez.shotz",
                     "https://facebook.com/dflamez.shotz",

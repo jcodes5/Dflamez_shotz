@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Photography Gallery",
-  description: "View selected soul portraits, artistic photography, and cinematic work by Dflamez Shotz.",
+  description: "View selected Afrocentric editorials, fashion stories, and cultural work by Dflamez Photography.",
   alternates: { canonical: "/gallery" },
 }
 

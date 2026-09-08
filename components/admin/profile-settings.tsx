@@ -12,14 +12,14 @@ import { User, Camera, Save, Upload } from "lucide-react"
 
 export function ProfileSettings() {
   const [profileData, setProfileData] = useState({
-    name: "Dflamez Shotz",
-    email: "hello@dflamezshotz.com",
-    phone: "+1 (555) 123-4567",
-    location: "Los Angeles, CA",
-    bio: "Soul Portraitor, Visual Storyteller, and Artistic Visionary capturing the essence of human experience through powerful imagery.",
+    name: "Dflamez Photography",
+    email: "dflameshot@gmail.com",
+    phone: "+2348106643611",
+    location: "Lagos + Akure, NG",
+    bio: "Afrocentric Editorial & Fashion Photographer. Celebrating heritage, skin, and style. Available for collabs & travel.",
     website: "https://dflamezshotz.com",
     instagram: "@dflamez.shotz",
-    facebook: "Dflamez Shotz Photography",
+    facebook: "Dflamez Photography",
     twitter: "@dflamez_shotz",
   })
 

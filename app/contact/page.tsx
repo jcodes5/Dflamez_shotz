@@ -34,7 +34,7 @@ const socialLinks = [
     name: "Facebook",
     icon: Facebook,
     url: "https://facebook.com/dflamez.shotz",
-    handle: "Dflamez Shotz Photography",
+    handle: "Dflamez Photography",
   },
   {
     name: "Twitter",
@@ -54,13 +54,13 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@dflamezshotz.com",
-    action: "mailto:hello@dflamezshotz.com",
+    value: "dflameshot@gmail.com",
+    action: "mailto:dflameshot@gmail.com",
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "Akure, Nigeria",
+    value: "Lagos + Akure, Nigeria",
     action: null,
   },
   {

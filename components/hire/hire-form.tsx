@@ -168,7 +168,7 @@ export function HireForm({
         const hireData = result.data
         const whatsappMessage = encodeURIComponent(
           [
-            "Hi Dflamez! I've submitted a hire request:",
+            "Hi Dflamez Photography! I've submitted a hire request:",
             `Hire Request ID: ${hireData.id}`,
             `Name: ${data.clientName}`,
             `Email: ${data.email}`,
@@ -552,7 +552,7 @@ export function HireForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-base font-semibold">
-                      Photography Style * <span className="text-destructive">Required</span>
+                      Style Direction * <span className="text-destructive">Required</span>
                     </FormLabel>
                     <FormDescription className="text-sm text-muted-foreground mb-4">
                       Select at least one style that appeals to you. Click to toggle selection.
@@ -681,6 +681,8 @@ export function HireForm({
                 </Card>
               )}
 
+              {/* Reference Images - only for standalone, moved to step 4 */}
+
               {/* Review Summary for compact variants */}
               {variant !== "standalone" && (
                 <Card>
@@ -707,6 +709,226 @@ export function HireForm({
                   </CardContent>
                 </Card>
               )}
+            </div>
+          )}
+
+          {/* Step 4: Preferences (standalone only) */}
+          {currentStep === 4 && variant === "standalone" && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h2 className="font-serif text-3xl font-bold text-foreground mb-4">Preferences</h2>
+                <p className="text-muted-foreground">Upload references and finalize your preferences</p>
+              </div>
+
+              {/* Reference Images */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Upload className="h-5 w-5" />
+                    Upload Reference Images
+                  </CardTitle>
+                  <CardDescription>Share up to 5 images that capture the mood, style, or composition you love</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center">
+                      <Upload className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                      <div className="text-sm text-muted-foreground mb-2">
+                        Click to browse or drag and drop
+                      </div>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        id="file-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById('file-upload')?.click()}
+                      >
+                        Choose Files
+                      </Button>
+                    </div>
+
+                    {referenceFiles.length > 0 && (
+                      <div className="grid grid-cols-3 gap-2">
+                        {referenceFiles.map((file, index) => (
+                          <div key={index} className="relative group">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Reference ${index + 1}`}
+                              className="w-full h-20 object-cover rounded-lg"
+                            />
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="destructive"
+                              className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => removeFile(index)}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Add-ons */}
+              {selectedService && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Add-ons</CardTitle>
+                    <CardDescription>Enhance your session with optional extras</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {addOns.map((addOn) => (
+                        <div
+                          key={addOn.id}
+                          className={cn(
+                            "flex items-center justify-between p-3 rounded-lg border transition-colors",
+                            selectedAddOns.includes(addOn.id)
+                              ? "bg-primary/10 border-primary"
+                              : "hover:bg-muted/50"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Checkbox
+                              checked={selectedAddOns.includes(addOn.id)}
+                              onCheckedChange={() => toggleAddOn(addOn.id)}
+                            />
+                            <span className="text-sm font-medium">{addOn.name}</span>
+                          </div>
+                          <Badge variant="outline" className="text-xs">₦{addOn.price}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Estimated Cost */}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-lg">Estimated Total:</span>
+                    <span className="text-2xl font-bold text-primary">₦{calculateTotalCost()}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Step 5: Review & Submit (standalone only) */}
+          {currentStep === 5 && variant === "standalone" && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <h2 className="font-serif text-3xl font-bold text-foreground mb-4">Review & Submit</h2>
+                <p className="text-muted-foreground">Please review all details before submitting</p>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Service</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Service:</span>
+                    <span className="font-medium">{services.find(s => s.id === selectedService)?.name || "Not selected"}</span>
+                  </div>
+                  {selectedAddOns.length > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Add-ons:</span>
+                      <span className="font-medium">{selectedAddOns.map(id => addOns.find(a => a.id === id)?.name).filter(Boolean).join(", ")}</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Your Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Name:</span>
+                    <span className="font-medium">{form.getValues("clientName")}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Email:</span>
+                    <span className="font-medium">{form.getValues("email")}</span>
+                  </div>
+                  {form.getValues("phone") && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Phone:</span>
+                      <span className="font-medium">{form.getValues("phone")}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Contact preference:</span>
+                    <span className="font-medium capitalize">{form.getValues("contactPreference")}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Budget:</span>
+                    <span className="font-medium">{form.getValues("budget")}</span>
+                  </div>
+                  {form.getValues("preferredDate") && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Preferred date:</span>
+                      <span className="font-medium">{new Date(form.getValues("preferredDate") as string).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {form.getValues("location") && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Location:</span>
+                      <span className="font-medium">{form.getValues("location")}</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Project Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div>
+                    <span className="text-muted-foreground">Styles:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {form.getValues("style").map((s: string) => (
+                        <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Message:</span>
+                    <p className="text-sm mt-1">{form.getValues("message")}</p>
+                  </div>
+                  {referenceFiles.length > 0 && (
+                    <div>
+                      <span className="text-muted-foreground">Reference images:</span>
+                      <p className="text-sm mt-1">{referenceFiles.length} file(s) attached</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="bg-primary/5 border-primary/20">
+                <CardContent className="pt-6 text-center">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-lg">Estimated Total:</span>
+                    <span className="text-2xl font-bold text-primary">₦{calculateTotalCost()}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Payment will be arranged directly on WhatsApp after submission.</p>
+                </CardContent>
+              </Card>
             </div>
           )}
 

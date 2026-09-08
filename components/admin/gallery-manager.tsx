@@ -226,9 +226,10 @@ export function GalleryManager() {
             aria-label="Filter by category"
           >
             <option value="all">All Categories</option>
-            <option value="Photography">Photography</option>
+            <option value="Editorial">Editorial</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Culture">Culture</option>
             <option value="Soul Portraits">Soul Portraits</option>
-            <option value="Videography">Videography</option>
           </select>
         </div>
         <Button 

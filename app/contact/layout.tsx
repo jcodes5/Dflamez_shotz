@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Contact Dflamez Shotz",
-  description: "Get in touch with Dflamez Shotz in Akure, Nigeria, about portraits, photography, and visual projects.",
+  title: "Contact Dflamez Photography",
+  description: "Get in touch with Dflamez Photography in Lagos + Akure, Nigeria, about editorial, fashion, and collabs.",
   alternates: { canonical: "/contact" },
 }
 

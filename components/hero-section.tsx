@@ -8,8 +8,8 @@ import { motion } from "framer-motion"
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center bg-background">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(212,175,55,0.1)_25%,rgba(212,175,55,0.1)_50%,transparent_50%,transparent_75%,rgba(212,175,55,0.1)_75%)] bg-[length:20px_20px]" />
+      {/* Afrocentric mudcloth-inspired backdrop in brand gold */}
+      <div className="absolute inset-0 afro-pattern opacity-60" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -20,6 +20,9 @@ export function HeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
+            <p className="editorial-kicker justify-center lg:justify-start">
+              Dflamez Photography · Lagos + Akure, NG
+            </p>
             <motion.h1
               className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-foreground leading-tight"
               initial={{ opacity: 0 }}
@@ -32,7 +35,7 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                SOUL
+                AFROCENTRIC
               </motion.span>
               <motion.span
                 className=" text-primary transform -rotate-2 inline-block"
@@ -40,7 +43,7 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0, rotate: -2 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
               >
-                PORTRAITS
+                EDITORIAL
               </motion.span>
               <motion.span
                 className="block"
@@ -48,7 +51,7 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
               >
-                & VISUAL
+                & FASHION
               </motion.span>
               <motion.span
                 className="text-primary transform rotate-1 inline-block"
@@ -66,8 +69,9 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.1 }}
             >
-              I'm <span className="home-script text-primary text-2xl sm:text-3xl">Dflamez Shot</span>, capturing the essence of souls through
-              powerful portraits, cinematic videography, and authentic photography that reveals the true spirit within.
+              I&apos;m <span className="home-script text-primary text-2xl sm:text-3xl">Dflamez Shotz</span>, an
+              Afrocentric editorial &amp; fashion photographer crafting bold portraits of heritage, skin, and style.
+              Available for collabs &amp; travel.
             </motion.p>
 
             <motion.div
@@ -77,9 +81,9 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 1.3 }}
             >
               {[
-                { icon: Palette, label: "Soul Portraits", rotation: 3 },
-                { icon: Video, label: "Videography", rotation: -2 },
-                { icon: Camera, label: "Photography", rotation: 1 },
+                { icon: Palette, label: "Editorial", rotation: 3 },
+                { icon: Video, label: "Fashion", rotation: -2 },
+                { icon: Camera, label: "Culture", rotation: 1 },
               ].map((service, index) => (
                 <motion.div
                   key={service.label}
@@ -130,7 +134,7 @@ export function HeroSection() {
                   className="border-2 border-primary text-primary hover:bg-primary hover:text-black font-bold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg bg-transparent w-full sm:w-auto"
                 >
                   <Link
-                    href="https://wa.me/1234567890?text=Hi%20Dfalmez,%20I'm%20interested%20in%20your%20services"
+                    href="https://wa.me/2348106643611?text=Hi%20Dflamez%20Photography%2C%20I%27m%20interested%20in%20an%20editorial%20or%20fashion%20session"
                     target="_blank"
                   >
                     HIRE ME NOW
@@ -158,7 +162,7 @@ export function HeroSection() {
                 ))}
               </div>
               <span className="text-sm sm:text-base text-muted-foreground">
-                <span className="font-bold text-foreground">30+</span> souls captured
+                <span className="font-bold text-foreground">30+</span> editorials &amp; muses captured · Lagos + Akure
               </span>
             </motion.div>
           </motion.div>
@@ -178,7 +182,7 @@ export function HeroSection() {
             >
               <img
                 src="/dflamez.png"
-                alt="Dfalmez Shot - Soul Portrait Artist"
+                alt="Dflamez Photography - Afrocentric editorial and fashion photographer"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
@@ -241,14 +245,14 @@ export function HeroSection() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 2.2 }}
             >
-              A glimpse into the souls I've captured
+              A glimpse into the heritage and style I capture
             </motion.p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
-              { src: "/gallery-showcase-1.png", title: "Soul Portrait Session", rotation: 1 },
-              { src: "/gallery-showcase-2.png", title: "Cinematic Story", rotation: -2 },
-              { src: "/gallery-showcase-3.png", title: "Artistic Portrait", rotation: 2 },
+              { src: "/gallery-showcase-1.png", title: "Afrocentric Editorial", rotation: 1 },
+              { src: "/gallery-showcase-2.png", title: "Fashion Story", rotation: -2 },
+              { src: "/gallery-showcase-3.png", title: "Culture Portrait", rotation: 2 },
             ].map((item, index) => (
               <motion.div
                 key={index}

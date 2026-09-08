@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Gold's Pen | Photography & Creativity Journal",
-  description: "Thoughts, insights, and stories about photography, creativity, and visual storytelling from Dflamez Shotz.",
+  description: "Thoughts, insights, and stories about Afrocentric editorial, fashion, and creativity from Dflamez Photography.",
   alternates: { canonical: "/blog" },
 }
 

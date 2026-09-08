@@ -340,9 +340,10 @@ export function GalleryUploadForm({ onUploadComplete }: { onUploadComplete?: () 
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Photography">Photography</SelectItem>
+                <SelectItem value="Editorial">Editorial</SelectItem>
+                <SelectItem value="Fashion">Fashion</SelectItem>
+                <SelectItem value="Culture">Culture</SelectItem>
                 <SelectItem value="Soul Portraits">Soul Portraits</SelectItem>
-                <SelectItem value="Videography">Videography</SelectItem>
               </SelectContent>
             </Select>
           </div>

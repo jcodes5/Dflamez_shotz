@@ -46,7 +46,7 @@ const BlogPage = () => {
           content: post.content,
           category: post.category || "Photography",
           tags: post.tags || [],
-          author: "Dflamez Shotz",
+          author: "Dflamez Photography",
           publishedAt: post.published_at ? new Date(post.published_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
           readTime: "5 min read", // Could be calculated based on content length
           image: post.featured_image || "/blog-featured-image-1.png"
@@ -78,8 +78,8 @@ const BlogPage = () => {
       excerpt: "What does it mean to truly see someone? In my years as a soul portraitor, I've learned that the most powerful images come from moments of genuine connection...",
       content: `What does it mean to truly see someone? In my years as a soul portraitor, I've learned that the most powerful images come from moments of genuine connection.`,
       category: "Photography",
-      tags: ["soul portraits", "philosophy", "connection"],
-      author: "Dflamez Shotz",
+      tags: ["editorial", "philosophy", "connection"],
+      author: "Dflamez Photography",
       publishedAt: "2024-01-15",
       readTime: "5 min read",
       image: "/blog-featured-image-1.png",

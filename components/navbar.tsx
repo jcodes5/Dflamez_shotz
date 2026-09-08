@@ -51,8 +51,9 @@ export function Navbar() {
         {/* Logo */}
         <div className="flex lg:flex-1">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link href="/" className="flex items-center gap-2 p-1.5">
+            <Link href="/" className="flex items-center gap-2 p-1.5" aria-label="Dflamez Photography home">
               <span className="font-brand text-3xl font-normal text-primary">Dflamez</span>
+              <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/70">Photography</span>
             </Link>
           </motion.div>
         </div>
@@ -139,8 +140,9 @@ export function Navbar() {
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               <div className="flex items-center justify-between">
-                <Link href="/" className="p-1.5">
+                <Link href="/" className="p-1.5" aria-label="Dflamez Photography home">
                   <span className="font-brand text-3xl font-normal text-primary">Dflamez</span>
+                  <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/70">Photography</span>
                 </Link>
                 <div className="flex items-center gap-2">
                   <ThemeToggle />

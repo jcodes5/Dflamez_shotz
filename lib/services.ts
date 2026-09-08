@@ -19,9 +19,9 @@ export interface AddOn {
 
 export const services: Service[] = [
   {
-    id: "soul-portraits",
-    name: "Soul Portraits",
-    description: "Deep, meaningful portraits that capture your essence",
+    id: "afrocentric-editorial",
+    name: "Afrocentric Editorial",
+    description: "Bold, heritage-rich editorials celebrating African identity, skin, and style",
     basePrice: 450,
     duration: "2-3 hours",
     deliverables: "20+ edited high-resolution images",
@@ -29,22 +29,32 @@ export const services: Service[] = [
     popular: true
   },
   {
-    id: "cinematic-videography",
-    name: "Cinematic Videography",
-    description: "Storytelling through motion with cinematic quality",
+    id: "fashion-beauty",
+    name: "Fashion & Beauty",
+    description: "High-fashion looks, beauty close-ups, and campaign-ready model portfolios",
     basePrice: 850,
     duration: "Full day",
-    deliverables: "Edited video + raw footage",
+    deliverables: "Edited gallery + raw selects",
     icon: Video,
     popular: false
   },
   {
-    id: "artistic-photography",
-    name: "Artistic Photography",
-    description: "Creative photography for personal branding or expression",
+    id: "culture-events",
+    name: "Culture & Events",
+    description: "Documentary-style coverage of cultural moments, shows, and creative collabs",
     basePrice: 350,
     duration: "1-2 hours",
     deliverables: "15+ edited images",
+    icon: Camera,
+    popular: false
+  },
+  {
+    id: "soul-portraiture",
+    name: "Soul Portraiture",
+    description: "Intimate, essence-driven portraits — a signature root of the studio, also available",
+    basePrice: 300,
+    duration: "1-2 hours",
+    deliverables: "15+ edited high-resolution images",
     icon: Camera,
     popular: false
   }

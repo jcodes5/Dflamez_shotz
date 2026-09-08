@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Book a Photography Session",
-  description: "Book a photography session with Dflamez Shotz and plan your next visual story.",
+  description: "Book an editorial or fashion session with Dflamez Photography and plan your next story.",
   alternates: { canonical: "/book" },
 }
 

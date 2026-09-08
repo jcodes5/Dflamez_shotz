@@ -12,25 +12,32 @@ interface ServiceSelectionProps {
 
 const services = [
   {
-    id: "soul-portraits",
-    name: "Soul Portraits",
-    description: "Capture the essence of your inner self with deeply personal portrait sessions",
+    id: "afrocentric-editorial",
+    name: "Afrocentric Editorial",
+    description: "Heritage-rich editorials celebrating African identity, skin, and style",
     icon: Heart,
-    features: ["1-2 hour session", "Professional editing", "High-resolution images", "Personal consultation"],
+    features: ["1-2 hour session", "Styled direction", "High-resolution images", "Moodboard consultation"],
   },
   {
-    id: "videography",
-    name: "Videography",
-    description: "Professional video production for events, documentaries, and creative projects",
+    id: "fashion-beauty",
+    name: "Fashion & Beauty",
+    description: "High-fashion looks, beauty close-ups, and campaign-ready portfolios",
     icon: Video,
     features: ["Full-day coverage", "Professional equipment", "Post-production editing", "Multiple formats"],
   },
   {
-    id: "photography",
-    name: "Photography",
-    description: "Comprehensive photography services for all occasions and creative visions",
+    id: "culture-events",
+    name: "Culture & Events",
+    description: "Documentary-style coverage of cultural moments, shows, and collabs",
     icon: Camera,
     features: ["Flexible timing", "Multiple locations", "Professional editing", "Print-ready files"],
+  },
+  {
+    id: "soul-portraiture",
+    name: "Soul Portraiture",
+    description: "Intimate, essence-driven portraits — also available on request",
+    icon: Heart,
+    features: ["1-2 hour session", "Personal consultation", "Professional editing", "High-resolution images"],
   },
 ]
 
@@ -47,7 +54,7 @@ export default function ServiceSelection({ bookingData, updateBookingData, onNex
         <p className="text-muted-foreground">Select the type of session you'd like to book</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {services.map((service) => {
           const Icon = service.icon
           const isSelected = bookingData.serviceType === service.id

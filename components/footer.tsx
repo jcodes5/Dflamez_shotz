@@ -18,11 +18,13 @@ export function Footer() {
               whileHover={{ rotate: 0, scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              Dflamez <span className="text-primary">Shotz</span>
+              Dflamez <span className="text-primary">Photography</span>
             </motion.h3>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto sm:mx-0 text-sm sm:text-base">
-              Capturing souls through powerful portraits, cinematic videography, and authentic photography. Every frame
-              tells a story, every shot reveals the essence within.
+            <p className="text-muted-foreground mb-2 max-w-md mx-auto sm:mx-0 text-sm sm:text-base">
+              Afrocentric editorial &amp; fashion photographer — also rooted in soul portraiture. Every frame celebrates heritage, skin, and style.
+            </p>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto sm:mx-0 text-xs sm:text-sm uppercase tracking-[0.2em]">
+              Lagos + Akure, NG · Available for collabs &amp; travel
             </p>
             <div className="flex justify-center sm:justify-start space-x-3 sm:space-x-4">
               {[
@@ -80,9 +82,9 @@ export function Footer() {
             </h4>
             <div className="space-y-3 mb-6">
               {[
-                { icon: Mail, text: "hello@dflamezshotz.com" },
+                { icon: Mail, text: "dflameshot@gmail.com" },
                 { icon: Phone, text: "+2348106643611" },
-                { icon: MapPin, text: "Akure, Nigeria" },
+                { icon: MapPin, text: "Lagos + Akure, Nigeria" },
               ].map((contact, index) => (
                 <div key={index} className="flex items-center justify-center sm:justify-start space-x-2">
                   <contact.icon className="h-4 w-4 text-primary flex-shrink-0" />
@@ -104,7 +106,7 @@ export function Footer() {
         <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <p className="text-muted-foreground text-xs sm:text-sm text-center sm:text-left">
-              © 2025 Dflamez Shotz. All rights reserved.
+              © 2025 Dflamez Photography (Dflamez Shotz). All rights reserved.
             </p>
             <div className="flex space-x-4 sm:space-x-6">
               <Link

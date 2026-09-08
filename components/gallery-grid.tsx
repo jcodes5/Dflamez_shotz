@@ -14,7 +14,7 @@ interface GalleryItem {
   description?: string
 }
 
-const categories = ["All", "Soul Portraits", "Videography", "Photography"]
+const categories = ["All", "Editorial", "Fashion", "Culture", "Soul Portraits"]
 
 export function GalleryGrid() {
   const [activeCategory, setActiveCategory] = useState("All")

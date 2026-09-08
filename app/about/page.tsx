@@ -44,8 +44,9 @@ export default function AboutPage() {
                 <span className="block">ABOUT</span>
                 <span className="text-primary transform -rotate-1 inline-block">DFLAMEZ</span>
               </h1>
+              <p className="editorial-kicker mb-4">Dflamez Photography · Lagos + Akure, NG</p>
               <p className="text-xl leading-8 text-muted-foreground mb-8">
-                Soul Portraitor, Visual Storyteller, and Artistic Visionary
+                Afrocentric Editorial &amp; Fashion Photographer — available for collabs &amp; travel
               </p>
               <div className="flex gap-4">
                 <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
@@ -64,7 +65,7 @@ export default function AboutPage() {
               <div className="aspect-square bg-muted rounded-lg overflow-hidden transform rotate-2">
                 <img
                   src="/dflamez.png"
-                  alt="Dflamez Shotz Portrait"
+                  alt="Dflamez Photography portrait"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -84,20 +85,21 @@ export default function AboutPage() {
           </div>
           <div className="prose prose-lg max-w-none">
             <p className="text-lg leading-8 text-foreground mb-6">
-              I'm Dflamez Shotz, and I believe that every person carries a universe within them. My journey as a soul
-              portraitor began over a decade ago when I realized that traditional photography wasn't capturing what I
-              truly saw in people - their essence, their stories, their inner light.
+              I&apos;m Dflamez Shotz of Dflamez Photography, and I believe every person carries a universe of heritage
+              within them. My journey as an Afrocentric editorial &amp; fashion photographer began when I realized
+              traditional photography wasn&apos;t celebrating what I truly saw in people — their roots, their skin,
+              their style, their inner light.
             </p>
             <p className="text-lg leading-8 text-foreground mb-6">
-              What started as a passion for capturing authentic moments evolved into a specialized practice of soul
-              portraiture. I don't just take pictures; I create visual narratives that reveal the depth and beauty of
-              the human experience. Each session is a collaborative journey of discovery, where we explore not just how
-              you look, but who you truly are.
+              What started as a passion for authentic moments evolved into bold editorials and fashion stories. I
+              don&apos;t just take pictures; I create visual narratives that celebrate African identity. Each session
+              is a collaboration — from moodboard to styling to the final frame — revealing not just how you look, but
+              who you truly are.
             </p>
             <p className="text-lg leading-8 text-foreground mb-6">
-              My work spans soul portraits, cinematic videography, and artistic photography. Whether I'm capturing the
-              quiet strength in someone's eyes, documenting life's pivotal moments, or creating visual stories for
-              brands, my approach remains the same: authentic, intentional, and deeply human.
+              My work majors in Afrocentric editorials, fashion &amp; beauty, and cultural storytelling — rooted
+              in soul portraiture, which I still offer. Based between Lagos and Akure and available for collabs
+              &amp; travel, my approach remains the same: authentic, intentional, and deeply rooted.
             </p>
           </div>
         </div>

@@ -53,7 +53,7 @@ export default function BookingReview({ bookingData }: BookingReviewProps) {
         const booking = result.data
         const message = encodeURIComponent(
           [
-            "Hi Dflamez! I would like to confirm this booking:",
+            "Hi Dflamez Photography! I would like to confirm this booking:",
             `Booking ID: ${booking.id}`,
             `Name: ${bookingData.clientName}`,
             `Email: ${bookingData.clientEmail}`,

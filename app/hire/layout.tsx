@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Hire Dflamez Shotz",
-  description: "Tell Dflamez Shotz about your photography or visual storytelling project and request a quote.",
+  title: "Hire Dflamez Photography",
+  description: "Tell Dflamez Photography about your editorial or fashion project and request a quote.",
   alternates: { canonical: "/hire" },
 }
 

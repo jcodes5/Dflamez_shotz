@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createApiRouteClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
+import { createServiceRoleClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
 import { isSupabaseConfigured } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
     
-    const client = createApiRouteClient()
+    const client = createServiceRoleClient()
     // Type guard to ensure we have a proper Supabase client
     if (!('from' in client)) {
       return NextResponse.json({
@@ -95,12 +95,6 @@ export async function POST(request: NextRequest) {
       message: body.message.trim(),
       status: 'pending',
       priority: body.priority || 'medium',
-      location: body.location?.trim() || null,
-      style: body.style || [],
-      add_ons: body.addOns || [],
-      contact_preference: body.contactPreference || 'email',
-      reference_images: body.referenceImages || [],
-      estimated_cost: body.estimatedCost || null
     })
     .select()
     .single()
@@ -137,7 +131,7 @@ export async function GET(request: NextRequest) {
       }, { status: 500 })
     }
     
-    const client = createApiRouteClient()
+    const client = createServiceRoleClient()
     // Type guard to ensure we have a proper Supabase client
     if (!('from' in client)) {
       return NextResponse.json({
