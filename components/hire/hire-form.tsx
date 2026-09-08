@@ -701,7 +701,7 @@ export function HireForm({
                     {selectedAddOns.length > 0 && (
                       <div className="flex items-center justify-between">
                         <span>Total Cost:</span>
-                        <span className="font-medium text-primary">${calculateTotalCost()}</span>
+                        <span className="font-medium text-primary">₦{calculateTotalCost()}</span>
                       </div>
                     )}
                   </CardContent>

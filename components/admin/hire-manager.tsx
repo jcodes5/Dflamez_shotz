@@ -141,7 +141,7 @@ export function HireManager() {
           <p className="text-sm text-muted-foreground">Approved</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-foreground">${stats.potentialRevenue.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-foreground">₦{stats.potentialRevenue.toLocaleString()}</p>
           <p className="text-sm text-muted-foreground">Potential Revenue</p>
         </Card>
       </div>
