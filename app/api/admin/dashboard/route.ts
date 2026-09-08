@@ -25,6 +25,8 @@ export async function GET() {
     const startOfWeek = new Date()
     startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay())
     startOfWeek.setHours(0, 0, 0, 0)
+    const startOfDay = new Date()
+    startOfDay.setHours(0, 0, 0, 0)
 
     const countRows = async (table: string, since?: string) => {
       let query = supabase.from(table).select("id", { count: "exact", head: true })
@@ -34,11 +36,12 @@ export async function GET() {
       return count ?? 0
     }
 
-    const [galleryTotal, galleryThisMonth, blogTotal, blogThisMonth, contactsTotal, contactsThisWeek, hiresTotal, hiresThisWeek, recentHires, recentContacts, recentGallery, recentBlog] = await Promise.all([
+    const [galleryTotal, galleryThisMonth, blogTotal, blogThisMonth, contactsTotal, contactsThisWeek, hiresTotal, hiresThisWeek, bookingsTotal, bookingsThisMonth, recentHires, recentContacts, recentGallery, recentBlog] = await Promise.all([
       countRows("gallery_items"), countRows("gallery_items", startOfMonth.toISOString()),
       countRows("blog_posts"), countRows("blog_posts", startOfMonth.toISOString()),
       countRows("client_inquiries"), countRows("client_inquiries", startOfWeek.toISOString()),
       countRows("hire_requests"), countRows("hire_requests", startOfWeek.toISOString()),
+      countRows("bookings"), countRows("bookings", startOfMonth.toISOString()),
       supabase.from("hire_requests").select("client_name, created_at").order("created_at", { ascending: false }).limit(2),
       supabase.from("client_inquiries").select("name, created_at").order("created_at", { ascending: false }).limit(2),
       supabase.from("gallery_items").select("title, created_at").order("created_at", { ascending: false }).limit(2),
@@ -56,12 +59,23 @@ export async function GET() {
       ...(recentBlog.data ?? []).map((item: { title: string; created_at: string }) => ({ type: "blog" as const, message: `Created \u201c${item.title}\u201d`, created_at: item.created_at })),
     ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6)
 
+    const totalInteractions = galleryTotal + blogTotal + contactsTotal + hiresTotal + bookingsTotal
+    const thisMonthInteractions = galleryThisMonth + blogThisMonth + contactsThisWeek + hiresThisWeek + bookingsThisMonth
+
     return NextResponse.json({
       stats: {
         gallery: { total: galleryTotal, period: galleryThisMonth, periodLabel: "this month" },
         blog: { total: blogTotal, period: blogThisMonth, periodLabel: "this month" },
         contacts: { total: contactsTotal, period: contactsThisWeek, periodLabel: "this week" },
         hires: { total: hiresTotal, period: hiresThisWeek, periodLabel: "this week" },
+      },
+      performance: {
+        totalViews: totalInteractions,
+        viewsGrowth: thisMonthInteractions,
+        engagement: contactsTotal + hiresTotal,
+        engagementGrowth: contactsThisWeek + hiresThisWeek,
+        sessions: bookingsTotal,
+        sessionsGrowth: bookingsThisMonth,
       },
       recentActivity: activity,
     })

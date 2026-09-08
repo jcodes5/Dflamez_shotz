@@ -31,7 +31,7 @@ interface HireRequest {
 export function HireManager() {
   const [hireRequests, setHireRequests] = useState<HireRequest[]>([])
   const [loading, setLoading] = useState(true)
-  const [updating, setUpdating] = useState<string | null>(null)
+  const [updating, setUpdating] = useState<{ id: string; action: 'approved' | 'declined' } | null>(null)
 
   // Fetch hire requests
   const fetchHireRequests = async () => {
@@ -54,7 +54,7 @@ export function HireManager() {
 
   // Update hire request status
   const updateHireRequestStatus = async (id: string, status: 'approved' | 'declined') => {
-    setUpdating(id)
+    setUpdating({ id, action: status })
     try {
       const response = await fetch(`/api/hire/${id}`, {
         method: 'PUT',
@@ -67,8 +67,8 @@ export function HireManager() {
       const result = await response.json()
 
       if (result.success) {
-        toast.success(`Hire request ${status} successfully`)
-        fetchHireRequests() // Refresh the list
+        toast.success(`Hire request ${status === 'approved' ? 'approved' : 'declined'} successfully`)
+        fetchHireRequests()
       } else {
         toast.error(result.message || 'Failed to update hire request')
       }
@@ -84,6 +84,14 @@ export function HireManager() {
     fetchHireRequests()
   }, [])
 
+  // Parse budget string to number (handles ranges like "₦50,000 - ₦100,000")
+  const parseBudget = (budgetStr: string | null): number => {
+    if (!budgetStr) return 0
+    const numbers = budgetStr.replace(/[^0-9]/g, ' ').trim().split(/\s+/).map(Number).filter(n => n > 0)
+    if (numbers.length === 0) return 0
+    return numbers[numbers.length - 1]
+  }
+
   // Calculate stats
   const stats = {
     total: hireRequests.length,
@@ -91,15 +99,7 @@ export function HireManager() {
     approved: hireRequests.filter(r => r.status === 'approved').length,
     potentialRevenue: hireRequests
       .filter(r => r.status === 'approved')
-      .reduce((sum, r) => {
-        // Use estimated cost if available, otherwise parse budget
-        if (r.estimated_cost) {
-          return sum + r.estimated_cost
-        }
-        const budget = r.budget || '₦0'
-        const amount = parseInt(budget.replace(/[^0-9]/g, '')) || 0
-        return sum + amount
-      }, 0)
+      .reduce((sum, r) => sum + (r.estimated_cost || parseBudget(r.budget)), 0)
   }
 
   if (loading) {
@@ -163,15 +163,15 @@ export function HireManager() {
           </Card>
         ) : (
           hireRequests.map((request) => (
-            <Card key={request.id} className="p-6">
-              <div className="flex items-start justify-between mb-4">
+            <Card key={request.id} className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                    <Briefcase className="h-6 w-6 text-primary-foreground" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-lg flex items-center justify-center shrink-0">
+                    <Briefcase className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-serif text-lg font-bold text-foreground">{request.client_name}</h3>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+                      <h3 className="font-serif text-base sm:text-lg font-bold text-foreground">{request.client_name}</h3>
                       <Badge
                         variant={
                           request.status === "pending"
@@ -193,14 +193,14 @@ export function HireManager() {
                         {request.priority}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
+                        <Calendar className="h-3.5 w-3.5" />
                         <span>Submitted: {new Date(request.created_at).toLocaleDateString()}</span>
                       </div>
                       {request.budget && (
                         <div className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4" />
+                          <DollarSign className="h-3.5 w-3.5" />
                           <span>{request.budget}</span>
                         </div>
                       )}
@@ -208,14 +208,14 @@ export function HireManager() {
                   </div>
                 </div>
                 {request.status === "pending" && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 shrink-0">
                     <Button
                       size="sm"
                       className="bg-green-600 hover:bg-green-700 text-white"
                       onClick={() => updateHireRequestStatus(request.id, 'approved')}
-                      disabled={updating === request.id}
+                      disabled={updating !== null && updating.id === request.id}
                     >
-                      {updating === request.id ? (
+                      {updating?.id === request.id && updating.action === 'approved' ? (
                         <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
                       ) : (
                         <Check className="h-4 w-4 mr-1" />
@@ -226,9 +226,9 @@ export function HireManager() {
                       size="sm"
                       variant="destructive"
                       onClick={() => updateHireRequestStatus(request.id, 'declined')}
-                      disabled={updating === request.id}
+                      disabled={updating !== null && updating.id === request.id}
                     >
-                      {updating === request.id ? (
+                      {updating?.id === request.id && updating.action === 'declined' ? (
                         <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
                       ) : (
                         <X className="h-4 w-4 mr-1" />
@@ -326,7 +326,7 @@ export function HireManager() {
               {request.reference_images && request.reference_images.length > 0 && (
                 <div className="mb-4">
                   <h4 className="text-sm font-semibold text-foreground mb-2">Reference Images:</h4>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {request.reference_images.slice(0, 3).map((image, index) => (
                       <img
                         key={index}
@@ -353,7 +353,7 @@ export function HireManager() {
                 <p className="text-foreground">{request.message}</p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {request.phone && (
                   <Button variant="outline" size="sm" asChild>
                     <a href={`https://wa.me/${request.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">

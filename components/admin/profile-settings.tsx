@@ -2,36 +2,151 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { User, Camera, Save, Upload } from "lucide-react"
+import { User, Camera, Save, Upload, Lock, Mail, Loader2 } from "lucide-react"
+import { toast } from "sonner"
+
+const defaultProfile = {
+  profile_name: "Dflamez Photography",
+  profile_email: "dflameshot@gmail.com",
+  profile_phone: "+2348106643611",
+  profile_location: "Lagos + Akure, NG",
+  profile_bio: "Afrocentric Editorial & Fashion Photographer. Celebrating heritage, skin, and style. Available for collabs & travel.",
+  profile_website: "https://dflamezshotz.com",
+  profile_instagram: "@dflamez.shotz",
+  profile_facebook: "Dflamez Photography",
+  profile_twitter: "@dflamez_shotz",
+}
 
 export function ProfileSettings() {
-  const [profileData, setProfileData] = useState({
-    name: "Dflamez Photography",
-    email: "dflameshot@gmail.com",
-    phone: "+2348106643611",
-    location: "Lagos + Akure, NG",
-    bio: "Afrocentric Editorial & Fashion Photographer. Celebrating heritage, skin, and style. Available for collabs & travel.",
-    website: "https://dflamezshotz.com",
-    instagram: "@dflamez.shotz",
-    facebook: "Dflamez Photography",
-    twitter: "@dflamez_shotz",
-  })
+  const [profileData, setProfileData] = useState(defaultProfile)
+  const [loading, setLoading] = useState(true)
+  const [newEmail, setNewEmail] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [updatingEmail, setUpdatingEmail] = useState(false)
+  const [updatingPassword, setUpdatingPassword] = useState(false)
+  const [savingProfile, setSavingProfile] = useState(false)
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const response = await fetch("/api/admin/settings")
+        const result = await response.json()
+        if (result.success && result.data) {
+          setProfileData(prev => ({ ...prev, ...result.data }))
+        }
+      } catch {
+        // Use defaults on error
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadProfile()
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setProfileData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSave = () => {
-    // In a real app, this would save to the backend
-    console.log("Saving profile data:", profileData)
-    alert("Profile updated successfully!")
+  const handleSaveProfile = async () => {
+    setSavingProfile(true)
+    try {
+      const response = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profileData),
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        toast.error(result.error || "Failed to save profile")
+        return
+      }
+      toast.success("Profile saved successfully")
+    } catch {
+      toast.error("Failed to save profile")
+    } finally {
+      setSavingProfile(false)
+    }
+  }
+
+  const handleEmailUpdate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newEmail.trim()) return
+
+    setUpdatingEmail(true)
+    try {
+      const response = await fetch("/api/admin/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newEmail: newEmail.trim() }),
+      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        toast.error(result.error || "Failed to update email")
+        return
+      }
+
+      setProfileData(prev => ({ ...prev, profile_email: newEmail.trim() }))
+      setNewEmail("")
+      toast.success("Email updated successfully")
+    } catch {
+      toast.error("Failed to update email")
+    } finally {
+      setUpdatingEmail(false)
+    }
+  }
+
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newPassword) return
+
+    if (newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters")
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match")
+      return
+    }
+
+    setUpdatingPassword(true)
+    try {
+      const response = await fetch("/api/admin/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword }),
+      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        toast.error(result.error || "Failed to update password")
+        return
+      }
+
+      setNewPassword("")
+      setConfirmPassword("")
+      toast.success("Password updated successfully")
+    } catch {
+      toast.error("Failed to update password")
+    } finally {
+      setUpdatingPassword(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-64 items-center justify-center text-muted-foreground">
+        Loading profile...
+      </div>
+    )
   }
 
   return (
@@ -60,51 +175,51 @@ export function ProfileSettings() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name" className="text-foreground font-semibold">
+              <Label htmlFor="profile_name" className="text-foreground font-semibold">
                 Full Name
               </Label>
-              <Input id="name" name="name" value={profileData.name} onChange={handleInputChange} className="mt-1" />
+              <Input id="profile_name" name="profile_name" value={profileData.profile_name} onChange={handleInputChange} className="mt-1" />
             </div>
             <div>
-              <Label htmlFor="email" className="text-foreground font-semibold">
+              <Label htmlFor="profile_email" className="text-foreground font-semibold">
                 Email Address
               </Label>
               <Input
-                id="email"
-                name="email"
+                id="profile_email"
+                name="profile_email"
                 type="email"
-                value={profileData.email}
+                value={profileData.profile_email}
                 onChange={handleInputChange}
                 className="mt-1"
               />
             </div>
             <div>
-              <Label htmlFor="phone" className="text-foreground font-semibold">
+              <Label htmlFor="profile_phone" className="text-foreground font-semibold">
                 Phone Number
               </Label>
-              <Input id="phone" name="phone" value={profileData.phone} onChange={handleInputChange} className="mt-1" />
+              <Input id="profile_phone" name="profile_phone" value={profileData.profile_phone} onChange={handleInputChange} className="mt-1" />
             </div>
             <div>
-              <Label htmlFor="location" className="text-foreground font-semibold">
+              <Label htmlFor="profile_location" className="text-foreground font-semibold">
                 Location
               </Label>
               <Input
-                id="location"
-                name="location"
-                value={profileData.location}
+                id="profile_location"
+                name="profile_location"
+                value={profileData.profile_location}
                 onChange={handleInputChange}
                 className="mt-1"
               />
             </div>
           </div>
           <div className="mt-4">
-            <Label htmlFor="bio" className="text-foreground font-semibold">
+            <Label htmlFor="profile_bio" className="text-foreground font-semibold">
               Bio
             </Label>
             <Textarea
-              id="bio"
-              name="bio"
-              value={profileData.bio}
+              id="profile_bio"
+              name="profile_bio"
+              value={profileData.profile_bio}
               onChange={handleInputChange}
               rows={4}
               className="mt-1"
@@ -121,49 +236,49 @@ export function ProfileSettings() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="website" className="text-foreground font-semibold">
+            <Label htmlFor="profile_website" className="text-foreground font-semibold">
               Website
             </Label>
             <Input
-              id="website"
-              name="website"
-              value={profileData.website}
+              id="profile_website"
+              name="profile_website"
+              value={profileData.profile_website}
               onChange={handleInputChange}
               className="mt-1"
             />
           </div>
           <div>
-            <Label htmlFor="instagram" className="text-foreground font-semibold">
+            <Label htmlFor="profile_instagram" className="text-foreground font-semibold">
               Instagram
             </Label>
             <Input
-              id="instagram"
-              name="instagram"
-              value={profileData.instagram}
+              id="profile_instagram"
+              name="profile_instagram"
+              value={profileData.profile_instagram}
               onChange={handleInputChange}
               className="mt-1"
             />
           </div>
           <div>
-            <Label htmlFor="facebook" className="text-foreground font-semibold">
+            <Label htmlFor="profile_facebook" className="text-foreground font-semibold">
               Facebook
             </Label>
             <Input
-              id="facebook"
-              name="facebook"
-              value={profileData.facebook}
+              id="profile_facebook"
+              name="profile_facebook"
+              value={profileData.profile_facebook}
               onChange={handleInputChange}
               className="mt-1"
             />
           </div>
           <div>
-            <Label htmlFor="twitter" className="text-foreground font-semibold">
+            <Label htmlFor="profile_twitter" className="text-foreground font-semibold">
               Twitter
             </Label>
             <Input
-              id="twitter"
-              name="twitter"
-              value={profileData.twitter}
+              id="profile_twitter"
+              name="profile_twitter"
+              value={profileData.profile_twitter}
               onChange={handleInputChange}
               className="mt-1"
             />
@@ -171,11 +286,127 @@ export function ProfileSettings() {
         </div>
       </Card>
 
+      {/* Account Security */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Change Email */}
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Mail className="h-6 w-6 text-primary" />
+            <h3 className="font-serif text-xl font-bold text-foreground">Change Email</h3>
+          </div>
+          <form onSubmit={handleEmailUpdate} className="space-y-4">
+            <div>
+              <Label htmlFor="current-email" className="text-foreground font-semibold">
+                Current Email
+              </Label>
+              <Input
+                id="current-email"
+                value={profileData.profile_email}
+                disabled
+                className="mt-1 bg-muted"
+              />
+            </div>
+            <div>
+              <Label htmlFor="new-email" className="text-foreground font-semibold">
+                New Email
+              </Label>
+              <Input
+                id="new-email"
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="Enter new email address"
+                className="mt-1"
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={updatingEmail || !newEmail.trim()}
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {updatingEmail ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <Mail className="mr-2 h-4 w-4" />
+                  Update Email
+                </>
+              )}
+            </Button>
+          </form>
+        </Card>
+
+        {/* Change Password */}
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Lock className="h-6 w-6 text-primary" />
+            <h3 className="font-serif text-xl font-bold text-foreground">Change Password</h3>
+          </div>
+          <form onSubmit={handlePasswordUpdate} className="space-y-4">
+            <div>
+              <Label htmlFor="new-password" className="text-foreground font-semibold">
+                New Password
+              </Label>
+              <Input
+                id="new-password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Min. 8 characters"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="confirm-password" className="text-foreground font-semibold">
+                Confirm Password
+              </Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                className="mt-1"
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={updatingPassword || !newPassword}
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {updatingPassword ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <Lock className="mr-2 h-4 w-4" />
+                  Update Password
+                </>
+              )}
+            </Button>
+          </form>
+        </Card>
+      </div>
+
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <Save className="mr-2 h-4 w-4" />
-          Save Changes
+        <Button onClick={handleSaveProfile} disabled={savingProfile} className="bg-primary text-primary-foreground hover:bg-primary/90">
+          {savingProfile ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Save Changes
+            </>
+          )}
         </Button>
       </div>
     </div>

@@ -15,6 +15,7 @@ type AdminSection = "overview" | "gallery" | "blog" | "contacts" | "hires" | "pr
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<AdminSection>("overview")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [isLargeScreen, setIsLargeScreen] = useState(false)
 
   useEffect(() => {
@@ -45,14 +46,24 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
       <AdminSidebar
         activeSection={activeSection}
-        onSectionChange={setActiveSection}
+        onSectionChange={(section) => {
+          setActiveSection(section)
+          setMobileOpen(false)
+        }}
         isCollapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileOpen}
       />
       <div className={`transition-all duration-300 ${isLargeScreen ? (sidebarCollapsed ? "lg:pl-16" : "lg:pl-64") : "pl-0"}`}>
-        <AdminHeader activeSection={activeSection} />
+        <AdminHeader activeSection={activeSection} onMenuToggle={() => setMobileOpen(!mobileOpen)} />
         <main className="p-6">{renderContent()}</main>
       </div>
     </div>

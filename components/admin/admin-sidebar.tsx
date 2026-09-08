@@ -14,6 +14,7 @@ interface AdminSidebarProps {
   onSectionChange: (section: AdminSection) => void
   isCollapsed?: boolean
   onToggleCollapse?: () => void
+  mobileOpen?: boolean
 }
 
 const navigation = [
@@ -25,13 +26,14 @@ const navigation = [
   { name: "Profile", icon: User, section: "profile" as AdminSection },
 ]
 
-export function AdminSidebar({ activeSection, onSectionChange, isCollapsed = false, onToggleCollapse }: AdminSidebarProps) {
+export function AdminSidebar({ activeSection, onSectionChange, isCollapsed = false, onToggleCollapse, mobileOpen = false }: AdminSidebarProps) {
   const { logout } = useAuth()
 
   return (
     <div className={cn(
-      "fixed inset-y-0 left-0 z-50 bg-card border-r border-border lg:block hidden transition-all duration-300",
-      isCollapsed ? "w-16" : "w-64"
+      "fixed inset-y-0 left-0 z-50 bg-card border-r border-border transition-all duration-300",
+      isCollapsed ? "w-16" : "w-64",
+      mobileOpen ? "block" : "hidden lg:block"
     )}>
       <div className="flex h-full flex-col">
         {/* Logo */}

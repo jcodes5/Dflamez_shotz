@@ -7,6 +7,7 @@ type AdminSection = "overview" | "gallery" | "blog" | "contacts" | "hires" | "pr
 
 interface AdminHeaderProps {
   activeSection: AdminSection
+  onMenuToggle?: () => void
 }
 
 const sectionTitles = {
@@ -18,12 +19,12 @@ const sectionTitles = {
   profile: "Profile Settings",
 }
 
-export function AdminHeader({ activeSection }: AdminHeaderProps) {
+export function AdminHeader({ activeSection, onMenuToggle }: AdminHeaderProps) {
   return (
     <header className="bg-background border-b border-border px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="lg:hidden">
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenuToggle}>
             <Menu className="h-5 w-5" />
           </Button>
           <div>

@@ -9,6 +9,7 @@ type AdminSection = "overview" | "gallery" | "blog" | "contacts" | "hires" | "pr
 type ActivityType = "hire" | "contact" | "gallery" | "blog"
 type DashboardData = {
   stats: Record<string, { total: number; period: number; periodLabel: string }>
+  performance: { totalViews: number; viewsGrowth: number; engagement: number; engagementGrowth: number; sessions: number; sessionsGrowth: number }
   recentActivity: { type: ActivityType; message: string; created_at: string }[]
 }
 
@@ -119,9 +120,30 @@ export function DashboardOverview({ onNavigate }: { onNavigate?: (section: Admin
       <Card className="p-6">
         <h3 className="mb-6 font-serif text-xl font-bold text-foreground">Website Performance</h3>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="text-center"><div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-muted"><Eye className="h-6 w-6 text-muted-foreground" /></div><p className="font-semibold text-foreground">Not connected</p><p className="text-sm text-muted-foreground">Page views</p></div>
-          <div className="text-center"><div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-muted"><Heart className="h-6 w-6 text-muted-foreground" /></div><p className="font-semibold text-foreground">Not connected</p><p className="text-sm text-muted-foreground">Engagement</p></div>
-          <div className="text-center"><div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-muted"><Calendar className="h-6 w-6 text-muted-foreground" /></div><p className="font-semibold text-foreground">Not connected</p><p className="text-sm text-muted-foreground">Session data</p></div>
+          <div className="text-center">
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+              <Eye className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-semibold text-foreground">{dashboard.performance.totalViews.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Total interactions</p>
+            <p className="text-xs text-green-600">+{dashboard.performance.viewsGrowth} this month</p>
+          </div>
+          <div className="text-center">
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+              <Heart className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-semibold text-foreground">{dashboard.performance.engagement.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Client inquiries</p>
+            <p className="text-xs text-green-600">+{dashboard.performance.engagementGrowth} this week</p>
+          </div>
+          <div className="text-center">
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+              <Calendar className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <p className="font-semibold text-foreground">{dashboard.performance.sessions.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Bookings</p>
+            <p className="text-xs text-green-600">+{dashboard.performance.sessionsGrowth} this month</p>
+          </div>
         </div>
       </Card>
     </div>
