@@ -39,7 +39,7 @@ export function Navbar() {
 
   return (
     <motion.header
-      className="bg-background/80 backdrop-blur-md border-b border-border shadow-sm sticky top-0 z-40"
+      className="bg-background border-b border-border shadow-sm sticky top-0 z-40 lg:bg-background/80 lg:backdrop-blur-md"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
