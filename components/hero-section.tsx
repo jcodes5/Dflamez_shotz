@@ -250,9 +250,9 @@ export function HeroSection() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
-              { src: "/gallery-showcase-1.png", title: "Afrocentric Editorial", rotation: 1 },
-              { src: "/gallery-showcase-2.png", title: "Fashion Story", rotation: -2 },
-              { src: "/gallery-showcase-3.png", title: "Culture Portrait", rotation: 2 },
+              { src: "/hero1.webp", title: "Afrocentric Editorial", rotation: 1 },
+              { src: "/hero2.webp", title: "Fashion Story", rotation: -2 },
+              { src: "/hero3.webp", title: "Culture Portrait", rotation: 2 },
             ].map((item, index) => (
               <motion.div
                 key={index}
