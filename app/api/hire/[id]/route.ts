@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createApiRouteClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
+import { createServiceRoleClient, isAuthenticatedAdmin } from "@/lib/supabase/server"
 import { isSupabaseConfigured } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
@@ -59,17 +59,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       }, { status: 500 })
     }
     
-    const supabase = createApiRouteClient()
-    
-    // Type guard to ensure supabase client has the required methods
-    if (!('from' in supabase)) {
+    const client = createServiceRoleClient()
+    if (!('from' in client)) {
       return NextResponse.json({
         success: false,
         message: "Supabase client is not properly configured"
       }, { status: 500 })
     }
 
-    const typedSupabase = supabase as SupabaseClient
+    const typedSupabase = client as SupabaseClient
 
     const { data, error } = await typedSupabase
       .from('hire_requests')
@@ -112,17 +110,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }, { status: 500 })
     }
     
-    const supabase = createApiRouteClient()
-    
-    // Type guard to ensure supabase client has the required methods
-    if (!('from' in supabase)) {
+    const client = createServiceRoleClient()
+    if (!('from' in client)) {
       return NextResponse.json({
         success: false,
         message: "Supabase client is not properly configured"
       }, { status: 500 })
     }
 
-    const typedSupabase = supabase as SupabaseClient
+    const typedSupabase = client as SupabaseClient
 
     // Validate input data
     const validationErrors = validateHireRequestUpdate(body)
@@ -199,17 +195,15 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       }, { status: 500 })
     }
     
-    const supabase = createApiRouteClient()
-    
-    // Type guard to ensure supabase client has the required methods
-    if (!('from' in supabase)) {
+    const client = createServiceRoleClient()
+    if (!('from' in client)) {
       return NextResponse.json({
         success: false,
         message: "Supabase client is not properly configured"
       }, { status: 500 })
     }
 
-    const typedSupabase = supabase as SupabaseClient
+    const typedSupabase = client as SupabaseClient
 
     const { error } = await typedSupabase
       .from('hire_requests')
